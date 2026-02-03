@@ -165,7 +165,7 @@ _MODE_PRESETS:
 ### Running the Benchmark
 
 ```bash
-conda activate android_world
+conda activate MemGUI
 python run.py
 ```
 
