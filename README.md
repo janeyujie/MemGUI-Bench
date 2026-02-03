@@ -7,6 +7,7 @@ A memory-centric benchmark for evaluating Mobile GUI Agents in dynamic environme
 ![Scenarios](https://img.shields.io/badge/Scenarios-68-orange)
 ![Avg_Steps](https://img.shields.io/badge/Avg_Steps-36-red)
 ![Cross_App](https://img.shields.io/badge/Cross_App-1~4_apps-purple)
+![Memory_Intensive](https://img.shields.io/badge/Memory_Intensive-89.8%25-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 **[📄 Paper](https://arxiv.org/) | [🌐 Website](https://lgy0404.github.io/MemGUI-Bench/) | [🏆 Leaderboard](https://lgy0404.github.io/MemGUI-Bench/leaderboard.html) | [📦 Trajectories](https://huggingface.co/datasets/lgy0404/memgui-bench-trajs)**
