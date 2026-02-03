@@ -1,0 +1,39 @@
+{
+  "name": "CogAgent",
+  "backbone": "-",
+  "type": "Agent-as-a-Model",
+  "institution": "Tsinghua & Zhipu",
+  "date": "2023-12-14",
+  "paperLink": "https://arxiv.org/abs/2312.08914",
+  "codeLink": "https://github.com/zai-org/CogVLM",
+  "hasUITree": false,
+  "hasLongTermMemory": false,
+  "crossApp": {
+    "app1": { "p1": 0.0, "p3": 0.0, "irr": 0.0 },
+    "app2": { "p1": 0.0, "p3": 0.0, "irr": 0.0 },
+    "app3": { "p1": 0.0, "p3": 0.0, "irr": 0.0 },
+    "app4": { "p1": 0.0, "p3": 0.0, "irr": 0.0 }
+  },
+  "difficulty": {
+    "easy": { "p1": 0.0, "p3": 0.0, "irr": 0.0 },
+    "medium": { "p1": 0.0, "p3": 0.0, "irr": 0.0 },
+    "hard": { "p1": 0.0, "p3": 0.0, "irr": 0.0 }
+  },
+  "avg": { "p1": 0.0, "p3": 0.0 },
+  "metrics": {
+    "shortTerm": {
+      "irr": 0.0,
+      "mtpr": 0.00,
+      "stepRatio": null,
+      "timePerStep": 33.2,
+      "costPerStep": null
+    },
+    "longTerm": {
+      "frr": 0.0,
+      "stepRatio": null,
+      "timePerStep": 32.8,
+      "costPerStep": null
+    }
+  }
+}
+

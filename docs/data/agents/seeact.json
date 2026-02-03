@@ -1,0 +1,39 @@
+{
+  "name": "SeeAct",
+  "backbone": "Gemini-2.5-Pro",
+  "type": "Agentic Workflow",
+  "institution": "OSU NLP",
+  "date": "2024-01-24",
+  "paperLink": "https://arxiv.org/abs/2401.01614",
+  "codeLink": "https://github.com/OSU-NLP-Group/SeeAct",
+  "hasUITree": true,
+  "hasLongTermMemory": false,
+  "crossApp": {
+    "app1": { "p1": 10.7, "p3": 25.0, "irr": 0.0 },
+    "app2": { "p1": 0.0, "p3": 0.0, "irr": 0.0 },
+    "app3": { "p1": 0.0, "p3": 0.6, "irr": 0.6 },
+    "app4": { "p1": 0.0, "p3": 0.0, "irr": 0.0 }
+  },
+  "difficulty": {
+    "easy": { "p1": 6.2, "p3": 12.5, "irr": 0.0 },
+    "medium": { "p1": 0.0, "p3": 2.4, "irr": 0.49 },
+    "hard": { "p1": 0.0, "p3": 0.0, "irr": 0.0 }
+  },
+  "avg": { "p1": 2.3, "p3": 5.5 },
+  "metrics": {
+    "shortTerm": {
+      "irr": 0.2,
+      "mtpr": 0.00,
+      "stepRatio": 1.01,
+      "timePerStep": 15.9,
+      "costPerStep": 0.0133
+    },
+    "longTerm": {
+      "frr": 2.4,
+      "stepRatio": 0.99,
+      "timePerStep": 16.3,
+      "costPerStep": 0.0134
+    }
+  }
+}
+

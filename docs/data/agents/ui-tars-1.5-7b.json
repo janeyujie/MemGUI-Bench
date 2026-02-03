@@ -1,0 +1,39 @@
+{
+  "name": "UI-TARS-1.5-7B",
+  "backbone": "-",
+  "type": "Agent-as-a-Model",
+  "institution": "ByteDance Seed",
+  "date": "2025-01-23",
+  "paperLink": "https://arxiv.org/abs/2501.12326",
+  "codeLink": "https://github.com/bytedance/UI-TARS",
+  "hasUITree": false,
+  "hasLongTermMemory": false,
+  "crossApp": {
+    "app1": { "p1": 14.3, "p3": 21.4, "irr": 11.1 },
+    "app2": { "p1": 0.0, "p3": 1.8, "irr": 1.8 },
+    "app3": { "p1": 0.0, "p3": 2.9, "irr": 4.0 },
+    "app4": { "p1": 0.0, "p3": 0.0, "irr": 2.9 }
+  },
+  "difficulty": {
+    "easy": { "p1": 8.3, "p3": 16.7, "irr": 9.26 },
+    "medium": { "p1": 0.0, "p3": 0.0, "irr": 1.71 },
+    "hard": { "p1": 0.0, "p3": 0.0, "irr": 0.87 }
+  },
+  "avg": { "p1": 3.1, "p3": 6.2 },
+  "metrics": {
+    "shortTerm": {
+      "irr": 3.8,
+      "mtpr": 0.04,
+      "stepRatio": 0.99,
+      "timePerStep": 9.9,
+      "costPerStep": null
+    },
+    "longTerm": {
+      "frr": 2.4,
+      "stepRatio": 1.04,
+      "timePerStep": 10.3,
+      "costPerStep": null
+    }
+  }
+}
+

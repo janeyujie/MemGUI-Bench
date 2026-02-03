@@ -1,0 +1,984 @@
+/* Leaderboard Specific Styles - Light Theme */
+
+.leaderboard-header {
+  padding-top: 120px;
+  padding-bottom: 40px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid #dee2e6;
+}
+
+.leaderboard-main {
+  max-width: 1600px;
+  padding: 30px 20px;
+  margin: 0 auto;
+}
+
+/* Tab Controls */
+.tab-controls {
+  margin-bottom: 20px;
+}
+
+.tab-controls .nav-tabs {
+  border-bottom: 2px solid #dee2e6;
+}
+
+.tab-controls .nav-link {
+  font-weight: 500;
+  color: #495057;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 12px 24px;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+
+.tab-controls .nav-link:hover {
+  color: #0d6efd;
+  border-bottom-color: #dee2e6;
+}
+
+.tab-controls .nav-link.active {
+  color: #0d6efd;
+  background: transparent;
+  border-bottom-color: #0d6efd;
+}
+
+/* Filters Section */
+.filters-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-weight: 600;
+  font-size: 0.85em;
+  color: #495057;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.filter-group .form-check-inline {
+  margin-right: 0;
+}
+
+.filter-group .form-select {
+  width: auto;
+  min-width: 140px;
+  font-size: 0.9em;
+  padding: 6px 12px;
+}
+
+.filter-result-count {
+  font-size: 0.85em;
+  color: #6c757d;
+  background: #e9ecef;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-left: auto;
+}
+
+#clearFilters {
+  font-size: 0.85em;
+  padding: 6px 12px;
+}
+
+/* Tags */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.tag-uitree {
+  background: #d1e7dd;
+  color: #0f5132;
+}
+
+.tag-ltm {
+  background: #cfe2ff;
+  color: #084298;
+}
+
+.tag-workflow {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.tag-model {
+  background: #e2d9f3;
+  color: #432874;
+}
+
+/* Legend */
+.legend-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9em;
+  color: #495057;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-item code {
+  background: #e9ecef;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+/* Table Container */
+.table-container {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  overflow: hidden;
+}
+
+.leaderboard-table-wrapper {
+  overflow-x: auto;
+}
+
+/* Main Table */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+
+.leaderboard-table thead th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #212529;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 2px solid #dee2e6;
+}
+
+/* Header Groups */
+.header-group {
+  background: #e9ecef !important;
+  border-bottom: 1px solid #dee2e6 !important;
+}
+
+.header-group th {
+  background: #e9ecef;
+  font-size: 0.85em;
+  padding: 8px 10px;
+}
+
+.header-subgroup th {
+  font-size: 0.8em;
+  color: #6c757d;
+  padding: 6px 10px;
+  background: #f8f9fa;
+}
+
+/* Data Rows */
+.leaderboard-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.leaderboard-table tbody tr.first-rank {
+  background: #fff9db;
+}
+
+.leaderboard-table tbody tr.first-rank:hover {
+  background: #fff3bf;
+}
+
+/* Rank Column */
+.rank-cell {
+  font-weight: 700;
+  font-size: 1em;
+  color: #495057;
+  width: 1%;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.9em;
+  background: #f8f9fa;
+  border: 2px solid #dee2e6;
+  color: #495057;
+}
+
+/* Gold - 1st place */
+.rank-badge.rank-1 {
+  background: linear-gradient(135deg, #ffd700 0%, #ffec8b 50%, #ffd700 100%);
+  border: 2px solid #daa520;
+  color: #8b6914;
+  box-shadow: 0 2px 8px rgba(218, 165, 32, 0.4);
+  font-size: 1em;
+  width: 36px;
+  height: 36px;
+}
+
+/* Silver - 2nd place */
+.rank-badge.rank-2 {
+  background: linear-gradient(135deg, #e8e8e8 0%, #ffffff 50%, #c0c0c0 100%);
+  border: 2px solid #a8a8a8;
+  color: #666;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Bronze - 3rd place */
+.rank-badge.rank-3 {
+  background: linear-gradient(135deg, #cd7f32 0%, #e8a762 50%, #cd7f32 100%);
+  border: 2px solid #b87333;
+  color: #5c3d1a;
+  box-shadow: 0 2px 6px rgba(205, 127, 50, 0.35);
+}
+
+/* Top 10 */
+.rank-badge.rank-top10 {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border: 2px solid #90caf9;
+  color: #1565c0;
+}
+
+.rank-cell .rank-star {
+  display: none; /* Hide star, we use badge style now */
+}
+
+/* Model Info Column */
+.model-cell {
+  text-align: left !important;
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* Model Info Row */
+.model-info-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.model-name-main {
+  font-weight: 600;
+  font-size: 0.95em;
+  color: #212529;
+}
+
+.tags-inline {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.tags-inline .tag {
+  font-size: 0.7em;
+  padding: 0 4px;
+}
+
+.model-backbone-inline {
+  font-size: 0.8em;
+  color: #6c757d;
+  font-weight: 400;
+}
+
+/* Model Sub Row */
+.model-sub-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78em;
+}
+
+.model-institution-text {
+  color: #495057;
+}
+
+.model-date-text {
+  color: #868e96;
+}
+
+.model-links-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.model-links-row .action-link {
+  font-size: 0.78em;
+  padding: 1px 5px;
+  background: #f0f6ff;
+  border-radius: 3px;
+  color: #0d6efd;
+}
+
+.model-links-row .action-link:hover {
+  background: #e0edff;
+}
+
+/* Legacy model-name styles (for other tables) */
+.model-name {
+  font-weight: 600;
+  font-size: 1em;
+  color: #212529;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.model-name .tags {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.model-name .tag {
+  font-size: 0.75em;
+  padding: 1px 6px;
+}
+
+.model-backbone {
+  font-size: 0.8em;
+  color: #6c757d;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.model-institution {
+  font-size: 0.8em;
+  color: #6c757d;
+  margin-top: 2px;
+}
+
+.model-date {
+  font-size: 0.75em;
+  color: #adb5bd;
+  margin-top: 2px;
+}
+
+.model-date i {
+  margin-right: 4px;
+}
+
+.model-authors {
+  margin-top: 4px;
+}
+
+.model-authors a {
+  font-size: 0.85em;
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.model-authors a:hover {
+  text-decoration: underline;
+}
+
+/* Action Links */
+.action-links {
+  display: inline-flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.action-link {
+  font-size: 0.7em;
+  color: #0d6efd;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 4px;
+  background: #f0f6ff;
+  border-radius: 3px;
+}
+
+.action-link:hover {
+  background: #e0edff;
+  color: #0a58ca;
+}
+
+.action-link.disabled {
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+/* Type Column */
+.type-cell {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.type-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.type-badge.workflow {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.type-badge.model {
+  background: #e2d9f3;
+  color: #432874;
+}
+
+/* Score Cells */
+.score-cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.score-cell.best {
+  font-weight: 700;
+  color: #198754;
+}
+
+.score-cell.second {
+  text-decoration: underline;
+}
+
+.score-cell.zero {
+  color: #adb5bd;
+}
+
+.avg-score {
+  font-weight: 600;
+  background: #f8f9fa;
+}
+
+/* Notes Section */
+.notes-section {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.notes-section h4 {
+  font-size: 1em;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 12px;
+}
+
+.notes-section ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.9em;
+  color: #495057;
+}
+
+.notes-section li {
+  margin-bottom: 6px;
+}
+
+/* Modal Styles */
+#bibtexModal .modal-content {
+  background: #fff;
+  border: 1px solid #dee2e6;
+}
+
+#bibtexModal .modal-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+#bibtexModal pre {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 0.85em;
+}
+
+#bibtexModal code {
+  color: #212529;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .leaderboard-main {
+    padding: 20px 15px;
+  }
+  
+  .filters-section {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .leaderboard-header {
+    padding-top: 100px;
+    padding-bottom: 30px;
+  }
+  
+  .filters-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .legend-section {
+    gap: 12px;
+    font-size: 0.8em;
+  }
+  
+  .leaderboard-table {
+    font-size: 0.8em;
+  }
+  
+  .model-cell {
+    white-space: normal;
+  }
+  
+  .model-info-row,
+  .model-sub-row {
+    flex-wrap: wrap;
+  }
+}
+
+/* ============================================
+   Memory Metrics Tab Styles
+   ============================================ */
+
+/* Tab Icon */
+.tab-controls .nav-link i {
+  margin-right: 6px;
+}
+
+/* View Intro Banner */
+.view-intro {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 0.9em;
+  color: #495057;
+}
+
+.view-intro i {
+  margin-right: 8px;
+  color: #6c757d;
+}
+
+.view-intro strong {
+  color: #212529;
+}
+
+.memory-intro {
+  background: linear-gradient(135deg, #e7f3ff 0%, #f5f9ff 100%);
+  border: 1px solid #b6d4fe;
+}
+
+.crossapp-intro {
+  background: linear-gradient(135deg, #fff3e6 0%, #fffaf5 100%);
+  border: 1px solid #ffdab3;
+}
+
+.efficiency-intro {
+  background: linear-gradient(135deg, #e8f5e9 0%, #f5faf5 100%);
+  border: 1px solid #a5d6a7;
+}
+
+/* Metrics Card */
+.metrics-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  padding: 20px;
+  height: 100%;
+}
+
+.metrics-card h5 {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Metric Badges */
+.metric-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.metric-badge.short-term {
+  background: #d1e7dd;
+  color: #0f5132;
+}
+
+.metric-badge.long-term {
+  background: #cfe2ff;
+  color: #084298;
+}
+
+/* Compact Table Styles */
+.leaderboard-table.compact {
+  font-size: 0.85em;
+}
+
+.leaderboard-table.compact th,
+.leaderboard-table.compact td {
+  padding: 10px 8px;
+}
+
+.leaderboard-table.compact th {
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+/* Agent Name in Compact Tables */
+.agent-name-compact {
+  font-weight: 600;
+  color: #212529;
+}
+
+/* Mini Tags */
+.tag-mini {
+  font-size: 0.75em;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* Highlight Good Values */
+.highlight-good {
+  color: #198754 !important;
+  font-weight: 600;
+}
+
+/* No Data Row */
+.no-data td {
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* NA Score Cell */
+.score-cell.na {
+  color: #adb5bd;
+  font-style: italic;
+}
+
+/* Sorted Column Highlight */
+.sorted-column {
+  background: rgba(255, 193, 7, 0.12) !important;
+}
+
+.leaderboard-table thead th.sorted-column {
+  background: rgba(255, 193, 7, 0.25) !important;
+  color: #856404;
+  font-weight: 700;
+}
+
+.leaderboard-table tbody td.sorted-column {
+  background: rgba(255, 193, 7, 0.08);
+  border-left: 2px solid rgba(255, 193, 7, 0.4);
+  border-right: 2px solid rgba(255, 193, 7, 0.4);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6c757d;
+}
+
+.empty-state i {
+  font-size: 3em;
+  margin-bottom: 16px;
+  display: block;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 1.1em;
+  margin: 0;
+}
+
+/* Model Meta in Other Tables */
+.model-meta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.8em;
+  color: #555;
+  margin-top: 2px;
+}
+
+.model-meta .model-institution {
+  margin-top: 0;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.model-meta .model-date {
+  margin-top: 0;
+  padding-left: 6px;
+  border-left: 1px solid #dee2e6;
+  white-space: nowrap;
+  color: #888;
+  font-size: 0.9em;
+}
+
+/* Responsive for Memory Metrics */
+@media (max-width: 992px) {
+  .metrics-card {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .metrics-card h5 {
+    font-size: 1em;
+  }
+  
+  .leaderboard-table.compact {
+    font-size: 0.75em;
+  }
+  
+  .leaderboard-table.compact th,
+  .leaderboard-table.compact td {
+    padding: 8px 6px;
+  }
+}
+
+/* ============================================
+   Cross-App Complexity Tab Styles
+   ============================================ */
+
+/* Cross-App Intro */
+.crossapp-intro {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #fff3e6 0%, #fff9f0 100%);
+  border-radius: 8px;
+  border: 1px solid #ffdab3;
+}
+
+.crossapp-intro p {
+  margin: 0;
+}
+
+/* Cross-App Table */
+.leaderboard-table.crossapp-table {
+  font-size: 0.88em;
+}
+
+.leaderboard-table.crossapp-table th,
+.leaderboard-table.crossapp-table td {
+  padding: 10px 8px;
+  min-width: 50px;
+}
+
+/* STM and LTM Header Colors */
+.stm-header {
+  background: #d1e7dd !important;
+  color: #0f5132 !important;
+  border-bottom: 2px solid #a3cfbb !important;
+}
+
+.ltm-header {
+  background: #cfe2ff !important;
+  color: #084298 !important;
+  border-bottom: 2px solid #9ec5fe !important;
+}
+
+.avg-header {
+  background: #f8f9fa !important;
+  color: #212529 !important;
+  border-bottom: 2px solid #dee2e6 !important;
+}
+
+/* Section Headers */
+.section-header td {
+  background: #e9ecef !important;
+  font-weight: 700;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #495057;
+  text-align: left !important;
+  padding: 12px 16px !important;
+  border-top: 2px solid #dee2e6;
+}
+
+/* Agent Cell in Cross-App Table */
+.agent-cell {
+  text-align: left !important;
+  font-weight: 600;
+  color: #212529;
+  min-width: 140px;
+  white-space: nowrap;
+}
+
+/* Task Count Row */
+.task-count-row {
+  background: #f8f9fa;
+  border-top: 2px solid #dee2e6;
+}
+
+.task-count-row td {
+  font-weight: 600;
+  color: #495057;
+}
+
+.task-count-row td:first-child {
+  text-align: left !important;
+}
+
+/* Alternating IRR columns with subtle background */
+.crossapp-table .header-subgroup th:nth-child(even) {
+  background: #fafafa;
+}
+
+/* Responsive for Cross-App Table */
+@media (max-width: 992px) {
+  .leaderboard-table.crossapp-table {
+    font-size: 0.8em;
+  }
+  
+  .leaderboard-table.crossapp-table th,
+  .leaderboard-table.crossapp-table td {
+    padding: 8px 6px;
+    min-width: 45px;
+  }
+  
+  .agent-cell {
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 576px) {
+  .leaderboard-table.crossapp-table {
+    font-size: 0.7em;
+  }
+  
+  .leaderboard-table.crossapp-table th,
+  .leaderboard-table.crossapp-table td {
+    padding: 6px 4px;
+    min-width: 40px;
+  }
+}
+
+/* ============================================
+   Efficiency Tab Styles
+   ============================================ */
+
+.leaderboard-table.efficiency-table {
+  font-size: 0.9em;
+}
+
+.leaderboard-table.efficiency-table th,
+.leaderboard-table.efficiency-table td {
+  padding: 10px 12px;
+}
+
+/* Best efficiency highlighting (green for lower = better) */
+.score-cell.best-efficiency {
+  font-weight: 700;
+  color: #198754;
+}
+
+/* Step ratio color coding */
+.score-cell.good-ratio {
+  color: #198754;
+}
+
+.score-cell.bad-ratio {
+  color: #dc3545;
+}
+
+/* Delta Indicators for pass@3 vs pass@1 comparison */
+.delta-indicator {
+  display: inline-block;
+  font-size: 0.75em;
+  font-weight: 500;
+  margin-left: 4px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+
+.delta-indicator.delta-good {
+  color: #198754;
+  background: rgba(25, 135, 84, 0.1);
+}
+
+.delta-indicator.delta-bad {
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .leaderboard-table.efficiency-table {
+    font-size: 0.8em;
+  }
+  
+  .leaderboard-table.efficiency-table th,
+  .leaderboard-table.efficiency-table td {
+    padding: 8px 8px;
+  }
+  
+  .delta-indicator {
+    font-size: 0.65em;
+    padding: 0 2px;
+  }
+}

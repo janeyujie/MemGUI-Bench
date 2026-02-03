@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard | MemGUI-Bench</title>
+  <link rel="icon" href="assets/favicon.png">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap & Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/leaderboard.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <img src="assets/favicon.png" alt="MemGUI-Bench" class="brand-icon">
+        <span class="brand-text">MemGUI-Bench</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="leaderboard.html">Leaderboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="submission.html">Submit</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="leaderboard-header">
+    <div class="container text-center">
+      <h1><i class="bi bi-trophy-fill text-warning"></i> MemGUI-Bench Leaderboard</h1>
+      <p class="lead text-secondary">
+        Evaluating GUI agents' memory capabilities in Dynamic Environments
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container-fluid leaderboard-main">
+    <!-- Filters Bar -->
+    <div class="filters-section">
+      <div class="filter-group">
+        <label>Type:</label>
+        <select class="form-select form-select-sm" id="agentTypeFilter">
+          <option value="all">All Agents</option>
+          <option value="workflow">Workflow Only</option>
+          <option value="model">Model Only</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>🌳 UI Tree:</label>
+        <select class="form-select form-select-sm" id="filterUITree">
+          <option value="all">All</option>
+          <option value="with">With</option>
+          <option value="without">Without</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>🧠 LTM:</label>
+        <select class="form-select form-select-sm" id="filterLTM">
+          <option value="all">All</option>
+          <option value="with">With</option>
+          <option value="without">Without</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Sort:</label>
+        <select class="form-select form-select-sm" id="sortBy"></select>
+      </div>
+      <button class="btn btn-sm btn-outline-secondary" id="clearFilters">
+        <i class="bi bi-x-circle"></i> Reset
+      </button>
+      <span class="filter-result-count" id="resultCount"></span>
+    </div>
+
+    <!-- Tab Selection (View Mode) -->
+    <div class="tab-controls">
+      <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active" id="main-tab" data-bs-toggle="tab" data-bs-target="#main-panel" type="button">
+            <i class="bi bi-table"></i> Main Results
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="crossapp-tab" data-bs-toggle="tab" data-bs-target="#crossapp-panel" type="button">
+            <i class="bi bi-layers"></i> Cross-App
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="difficulty-tab" data-bs-toggle="tab" data-bs-target="#difficulty-panel" type="button">
+            <i class="bi bi-bar-chart-steps"></i> Difficulty
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="efficiency-tab" data-bs-toggle="tab" data-bs-target="#efficiency-panel" type="button">
+            <i class="bi bi-speedometer2"></i> Efficiency
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend-section">
+      <span class="legend-item"><span class="tag tag-uitree">🌳</span> Uses UI Tree</span>
+      <span class="legend-item"><span class="tag tag-ltm">🧠</span> Has Long-Term Memory</span>
+      <span class="legend-item"><span class="type-badge workflow">Workflow</span> Multi-agent Framework</span>
+      <span class="legend-item"><span class="type-badge model">Model</span> End-to-End Model</span>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="leaderboardContent">
+      <!-- Main Results Tab -->
+      <div class="tab-pane fade show active" id="main-panel" role="tabpanel">
+        <div class="table-container">
+          <div id="mainTable" class="leaderboard-table-wrapper"></div>
+        </div>
+      </div>
+      <!-- Cross-App Complexity Tab -->
+      <div class="tab-pane fade" id="crossapp-panel" role="tabpanel">
+        <div class="view-intro crossapp-intro">
+          <i class="bi bi-info-circle"></i>
+          Performance breakdown by cross-application complexity (1 to 4 apps).
+          <strong>SR</strong> = Success Rate, <strong>IRR</strong> = Information Retention Rate.
+        </div>
+        <div class="table-container">
+          <div id="crossAppTable" class="leaderboard-table-wrapper"></div>
+        </div>
+      </div>
+      <!-- Difficulty Tab -->
+      <div class="tab-pane fade" id="difficulty-panel" role="tabpanel">
+        <div class="view-intro difficulty-intro">
+          <i class="bi bi-info-circle"></i>
+          Performance breakdown by task difficulty level.
+          <strong>IRR</strong> = Information Retention Rate (memory fidelity metric).
+        </div>
+        <div class="table-container">
+          <div id="difficultyTable" class="leaderboard-table-wrapper"></div>
+        </div>
+      </div>
+      <!-- Efficiency Tab -->
+      <div class="tab-pane fade" id="efficiency-panel" role="tabpanel">
+        <div class="view-intro efficiency-intro">
+          <i class="bi bi-info-circle"></i>
+          Computational efficiency metrics.
+          <strong>Step Ratio</strong> = actual steps / golden steps (lower is better),
+          <strong>Time/Step</strong> = seconds per action,
+          <strong>Cost/Step</strong> = API cost per action.
+        </div>
+        <div class="table-container">
+          <div id="efficiencyTable" class="leaderboard-table-wrapper"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes Section -->
+    <div class="notes-section">
+      <h4><i class="bi bi-info-circle"></i> Notes</h4>
+      <ul>
+        <li><strong>p@k</strong> denotes pass@k multi-attempt evaluation: p@1 = first attempt, p@3 = best of 3 attempts</li>
+        <li><strong>Rank</strong>: 🥇 Gold (1st), 🥈 Silver (2nd), 🥉 Bronze (3rd), 🔵 Top 10</li>
+        <li><strong>Tags</strong>: 🌳 Uses UI Tree, 🧠 Long-Term Memory</li>
+        <li><strong>Type</strong>: <code>Workflow</code> = Agentic Workflow (multi-agent), <code>Model</code> = End-to-End Model</li>
+        <li><strong>Highlighting</strong>: <strong>Bold</strong> = best, <u>Underline</u> = second best</li>
+        <li><strong>Memory Metrics</strong>: <code>IRR</code> = Information Retention Rate, <code>MTPR</code> = Memory-Task Proficiency Ratio, <code>FRR</code> = Failure Recovery Rate</li>
+        <li><strong>Efficiency</strong>: <code>Steps</code> = step ratio (lower is better), <code>Time/Step</code> = seconds/action, <code>Cost/Step</code> = $/action</li>
+        <li>See <a href="submission.html">submission guidelines</a> to add your results</li>
+      </ul>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container text-center">
+      <p>MemGUI-Bench © 2026 | <a href="index.html">Home</a></p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/leaderboard.js"></script>
+</body>
+</html>
+

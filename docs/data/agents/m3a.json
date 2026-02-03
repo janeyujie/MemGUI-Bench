@@ -1,0 +1,39 @@
+{
+  "name": "M3A",
+  "backbone": "Gemini-2.5-Pro",
+  "type": "Agentic Workflow",
+  "institution": "Google DeepMind",
+  "date": "2024-05-01",
+  "paperLink": "https://arxiv.org/abs/2405.14573",
+  "codeLink": "https://github.com/google-research/android_world",
+  "hasUITree": true,
+  "hasLongTermMemory": false,
+  "crossApp": {
+    "app1": { "p1": 46.4, "p3": 64.3, "irr": 31.7 },
+    "app2": { "p1": 28.6, "p3": 41.1, "irr": 43.8 },
+    "app3": { "p1": 29.4, "p3": 44.1, "irr": 35.9 },
+    "app4": { "p1": 30.0, "p3": 50.0, "irr": 37.5 }
+  },
+  "difficulty": {
+    "easy": { "p1": 39.6, "p3": 47.9, "irr": 31.67 },
+    "medium": { "p1": 35.7, "p3": 50.0, "irr": 48.66 },
+    "hard": { "p1": 21.1, "p3": 44.7, "irr": 36.44 }
+  },
+  "avg": { "p1": 32.8, "p3": 47.7 },
+  "metrics": {
+    "shortTerm": {
+      "irr": 39.3,
+      "mtpr": 0.41,
+      "stepRatio": 0.81,
+      "timePerStep": 14.7,
+      "costPerStep": 0.0165
+    },
+    "longTerm": {
+      "frr": 16.3,
+      "stepRatio": 0.80,
+      "timePerStep": 14.5,
+      "costPerStep": 0.0162
+    }
+  }
+}
+

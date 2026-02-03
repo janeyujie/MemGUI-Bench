@@ -1,0 +1,39 @@
+{
+  "name": "GUI-Owl-7B",
+  "backbone": "-",
+  "type": "Agent-as-a-Model",
+  "institution": "Alibaba",
+  "date": "2025-08-01",
+  "paperLink": "http://arxiv.org/abs/2508.15144",
+  "codeLink": "https://github.com/X-PLUG/MobileAgent",
+  "hasUITree": false,
+  "hasLongTermMemory": false,
+  "crossApp": {
+    "app1": { "p1": 21.4, "p3": 35.7, "irr": 11.7 },
+    "app2": { "p1": 1.8, "p3": 1.8, "irr": 3.6 },
+    "app3": { "p1": 2.9, "p3": 7.1, "irr": 7.1 },
+    "app4": { "p1": 0.0, "p3": 4.0, "irr": 4.0 }
+  },
+  "difficulty": {
+    "easy": { "p1": 14.6, "p3": 22.9, "irr": 9.89 },
+    "medium": { "p1": 0.0, "p3": 2.4, "irr": 4.98 },
+    "hard": { "p1": 2.6, "p3": 2.6, "irr": 2.63 }
+  },
+  "avg": { "p1": 6.2, "p3": 10.2 },
+  "metrics": {
+    "shortTerm": {
+      "irr": 5.7,
+      "mtpr": 0.07,
+      "stepRatio": 0.92,
+      "timePerStep": 9.6,
+      "costPerStep": null
+    },
+    "longTerm": {
+      "frr": 3.3,
+      "stepRatio": 0.93,
+      "timePerStep": 9.6,
+      "costPerStep": null
+    }
+  }
+}
+

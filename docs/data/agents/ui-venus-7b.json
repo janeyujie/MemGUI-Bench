@@ -1,0 +1,39 @@
+{
+  "name": "UI-Venus-7B",
+  "backbone": "-",
+  "type": "Agent-as-a-Model",
+  "institution": "InclusionAI",
+  "date": "2025-08-01",
+  "paperLink": "https://arxiv.org/abs/2508.10833",
+  "codeLink": "https://github.com/inclusionAI/UI-Venus",
+  "hasUITree": false,
+  "hasLongTermMemory": false,
+  "crossApp": {
+    "app1": { "p1": 21.4, "p3": 28.6, "irr": 6.7 },
+    "app2": { "p1": 1.8, "p3": 1.8, "irr": 2.7 },
+    "app3": { "p1": 0.0, "p3": 2.9, "irr": 1.5 },
+    "app4": { "p1": 0.0, "p3": 0.0, "irr": 0.0 }
+  },
+  "difficulty": {
+    "easy": { "p1": 14.6, "p3": 20.8, "irr": 6.94 },
+    "medium": { "p1": 0.0, "p3": 0.0, "irr": 1.22 },
+    "hard": { "p1": 0.0, "p3": 0.0, "irr": 0.0 }
+  },
+  "avg": { "p1": 5.5, "p3": 7.8 },
+  "metrics": {
+    "shortTerm": {
+      "irr": 2.6,
+      "mtpr": 0.05,
+      "stepRatio": 1.03,
+      "timePerStep": 12.2,
+      "costPerStep": null
+    },
+    "longTerm": {
+      "frr": 1.7,
+      "stepRatio": 1.03,
+      "timePerStep": 11.6,
+      "costPerStep": null
+    }
+  }
+}
+

@@ -1,0 +1,126 @@
+__pycache__/
+framework/models/AppAgent/tasks/
+framework/models/MobileAgent/Mobile-Agent/screenshot*
+framework/models/MobileAgent/Mobile-Agent/temp*
+framework/models/MobileAgent/Mobile-Agent-v2/screenshot*
+framework/models/MobileAgent/Mobile-Agent-v2/temp*
+framework/models/groundingdino_swint_ogc.pth
+screenshot
+results
+config.yaml
+tmp
+tmp.ipynb
+screenlog*
+* copy*
+.ruff_cache
+screenshot_*
+temp_*
+*test*
+swift
+flagged
+framework/avd/
+
+
+# Created by .ignore support plugin (hsz.mobi)
+### Python template
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+.idea
+droidbot_output
+_site
+Gemfile.lock
+.DS_Store
+documents
+temp
+venv
+apks/
+output/
+debug.py
+.env
+eval_compare_results/
+eval_task_fliter_results/*
+evaluator_compare/logs*
+
+
+
+# androidworld
+# Compiled python modules.
+*.pyc
+
+# Byte-compiled
+framework/models/AndroidWorld/_pycache__/
+framework/models/AndroidWorld/.cache/
+
+# Poetry, setuptools, PyPI distribution artifacts.
+/*.egg-info
+.eggs/
+framework/models/AndroidWorld/build/
+framework/models/AndroidWorld/dist/
+framework/models/AndroidWorld/poetry.lock
+
+# Tests
+framework/models/AndroidWorld/.pytest_cache/
+
+# Type checking
+framework/models/AndroidWorld/.pytype/
+
+# Other
+framework/models/AndroidWorld/*.DS_Store
+
+# PyCharm
+framework/models/AndroidWorld/.idea
+data_process/processed_data
+data_process/dump_from_training_json/conversation_visualizations/conversation_viewer.html

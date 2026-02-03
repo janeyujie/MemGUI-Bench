@@ -1,0 +1,39 @@
+{
+  "name": "Agent-S2",
+  "backbone": "Gemini-2.5-Pro",
+  "type": "Agentic Workflow",
+  "institution": "UCSB",
+  "date": "2025-04-01",
+  "paperLink": "https://arxiv.org/abs/2504.00906",
+  "codeLink": "https://github.com/simular-ai/Agent-S",
+  "hasUITree": false,
+  "hasLongTermMemory": true,
+  "crossApp": {
+    "app1": { "p1": 50.0, "p3": 78.6, "irr": 51.7 },
+    "app2": { "p1": 19.6, "p3": 35.7, "irr": 37.6 },
+    "app3": { "p1": 26.5, "p3": 52.9, "irr": 38.9 },
+    "app4": { "p1": 10.0, "p3": 30.0, "irr": 33.3 }
+  },
+  "difficulty": {
+    "easy": { "p1": 41.7, "p3": 64.6, "irr": 38.72 },
+    "medium": { "p1": 19.0, "p3": 42.9, "irr": 42.48 },
+    "hard": { "p1": 18.4, "p3": 36.8, "irr": 36.92 }
+  },
+  "avg": { "p1": 27.3, "p3": 49.2 },
+  "metrics": {
+    "shortTerm": {
+      "irr": 39.5,
+      "mtpr": 0.45,
+      "stepRatio": 0.86,
+      "timePerStep": 28.1,
+      "costPerStep": 0.051
+    },
+    "longTerm": {
+      "frr": 21.5,
+      "stepRatio": 0.86,
+      "timePerStep": 27.5,
+      "costPerStep": 0.0522
+    }
+  }
+}
+

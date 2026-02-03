@@ -1,0 +1,39 @@
+{
+  "name": "Mobile-Agent-V2",
+  "backbone": "Gemini-2.5-Pro",
+  "type": "Agentic Workflow",
+  "institution": "Alibaba",
+  "date": "2024-06-03",
+  "paperLink": "https://arxiv.org/abs/2406.01014",
+  "codeLink": "https://github.com/X-PLUG/MobileAgent",
+  "hasUITree": false,
+  "hasLongTermMemory": false,
+  "crossApp": {
+    "app1": { "p1": 14.3, "p3": 17.9, "irr": 0.0 },
+    "app2": { "p1": 0.0, "p3": 0.0, "irr": 0.0 },
+    "app3": { "p1": 0.0, "p3": 0.0, "irr": 0.0 },
+    "app4": { "p1": 0.0, "p3": 0.0, "irr": 0.0 }
+  },
+  "difficulty": {
+    "easy": { "p1": 8.3, "p3": 10.4, "irr": 0.0 },
+    "medium": { "p1": 0.0, "p3": 0.0, "irr": 0.0 },
+    "hard": { "p1": 0.0, "p3": 0.0, "irr": 0.0 }
+  },
+  "avg": { "p1": 3.1, "p3": 3.9 },
+  "metrics": {
+    "shortTerm": {
+      "irr": 0.0,
+      "mtpr": 0.00,
+      "stepRatio": 0.92,
+      "timePerStep": 29.4,
+      "costPerStep": 0.066
+    },
+    "longTerm": {
+      "frr": 0.8,
+      "stepRatio": 0.94,
+      "timePerStep": 28.8,
+      "costPerStep": 0.0684
+    }
+  }
+}
+

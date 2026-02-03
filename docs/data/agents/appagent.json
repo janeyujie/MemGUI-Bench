@@ -1,0 +1,39 @@
+{
+  "name": "AppAgent",
+  "backbone": "Gemini-2.5-Pro",
+  "type": "Agentic Workflow",
+  "institution": "Tencent",
+  "date": "2023-12-21",
+  "paperLink": "https://arxiv.org/abs/2312.13771",
+  "codeLink": "https://github.com/TencentQQGYLab/AppAgent",
+  "hasUITree": true,
+  "hasLongTermMemory": false,
+  "crossApp": {
+    "app1": { "p1": 14.3, "p3": 42.9, "irr": 11.1 },
+    "app2": { "p1": 0.0, "p3": 0.0, "irr": 0.0 },
+    "app3": { "p1": 0.0, "p3": 0.0, "irr": 0.0 },
+    "app4": { "p1": 0.0, "p3": 0.0, "irr": 0.0 }
+  },
+  "difficulty": {
+    "easy": { "p1": 8.3, "p3": 22.9, "irr": 4.64 },
+    "medium": { "p1": 0.0, "p3": 2.4, "irr": 0.0 },
+    "hard": { "p1": 0.0, "p3": 0.0, "irr": 0.0 }
+  },
+  "avg": { "p1": 3.1, "p3": 9.4 },
+  "metrics": {
+    "shortTerm": {
+      "irr": 1.5,
+      "mtpr": 0.04,
+      "stepRatio": 1.46,
+      "timePerStep": 27.3,
+      "costPerStep": 0.0078
+    },
+    "longTerm": {
+      "frr": 4.4,
+      "stepRatio": 1.22,
+      "timePerStep": 33.9,
+      "costPerStep": 0.0083
+    }
+  }
+}
+

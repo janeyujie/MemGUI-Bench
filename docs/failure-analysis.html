@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Failure Analysis | MemGUI-Bench</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/gallery.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <img src="assets/favicon.png" alt="MemGUI-Bench" class="brand-icon">
+        <span class="brand-text">MemGUI-Bench</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html#overview">Overview</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#benchmark">Benchmark</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#results">Results</a></li>
+          <li class="nav-item"><a class="nav-link" href="leaderboard.html">Leaderboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="submission.html">Submit</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#citation">Citation</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">Failure Analysis</h1>
+      <p class="page-subtitle">Comprehensive Analysis of GUI Agent Failure Patterns</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="section-padding">
+    <div class="container">
+      
+      <!-- Overview -->
+      <section class="gallery-section mb-5">
+        <h2 class="section-title">Failure Pattern Overview</h2>
+        <p class="section-desc">
+          Execution timeout accounts for <strong>72.3%</strong> of failures across 1,265 task executions, 
+          with individual agent timeout rates ranging from 22.6% (Agent-S2) to 93.9% (AppAgent). 
+          Among non-timeout failures (343 cases), <strong>memory hallucination dominates at 58.9%</strong> on average,
+          confirming that memory limitations represent the primary bottleneck for current GUI agents.
+          The systematic prevalence of execution timeouts indicates that agents struggle to maintain 
+          task coherence and efficient exploration strategies over extended interaction sequences.
+        </p>
+        
+        <div class="gallery-grid">
+          <div class="gallery-item full-width">
+            <a href="images/failure-analysis/failure-case-distribution.png" class="gallery-link" data-lightbox="failure">
+              <img src="images/failure-analysis/failure-case-distribution.png" alt="Failure Case Distribution">
+            </a>
+            <div class="gallery-caption">
+              <h5>Failure Type Distributions</h5>
+              <p>Failure type distributions for each GUI agent among non-timeout failures.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Failure Categories -->
+      <section class="gallery-section mb-5">
+        <h2 class="section-title">Failure Mode Categories</h2>
+        <p class="section-desc">
+          We identified 7 distinct failure modes through systematic analysis of failed trajectories. 
+          Each category reveals specific architectural limitations and provides actionable design implications.
+        </p>
+
+        <!-- Failure Mode 1: Execution Timeout -->
+        <div class="failure-card mb-4">
+          <div class="failure-header">
+            <span class="failure-badge timeout">1</span>
+            <h3 class="failure-title">Execution Timeout</h3>
+            <span class="failure-rate">72.3% of all failures</span>
+          </div>
+          <p class="failure-desc">
+            Agents exhaust the maximum allowed steps without completing the task. 
+            This indicates poor task decomposition, inefficient exploration, or inability to recognize dead-ends.
+          </p>
+          <div class="gallery-grid">
+            <div class="gallery-item full-width">
+              <a href="images/failure-analysis/execution-timeout.png" class="gallery-link" data-lightbox="failures">
+                <img src="images/failure-analysis/execution-timeout.png" alt="Execution Timeout">
+              </a>
+              <div class="gallery-caption">
+                <h5>Execution Timeout Example</h5>
+                <p>Representative trajectory showing an agent failing to complete the task within the step limit.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure Mode 2: Partial Memory Hallucination -->
+        <div class="failure-card mb-4">
+          <div class="failure-header">
+            <span class="failure-badge memory">2</span>
+            <h3 class="failure-title">Partial Memory Hallucination</h3>
+          </div>
+          <p class="failure-desc">
+            Agents correctly recall some information units but fabricate or confuse others. 
+            This reveals partial memory retention with contamination from irrelevant context.
+          </p>
+          <div class="gallery-grid">
+            <div class="gallery-item full-width">
+              <a href="images/failure-analysis/partial-memory-hallucination.png" class="gallery-link" data-lightbox="failures">
+                <img src="images/failure-analysis/partial-memory-hallucination.png" alt="Partial Memory Hallucination">
+              </a>
+              <div class="gallery-caption">
+                <h5>Partial Memory Hallucination Example</h5>
+                <p>Agent correctly remembers some details but hallucinates others, showing inconsistent memory fidelity.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure Mode 3: Process Memory Hallucination -->
+        <div class="failure-card mb-4">
+          <div class="failure-header">
+            <span class="failure-badge memory">3</span>
+            <h3 class="failure-title">Process Memory Hallucination</h3>
+          </div>
+          <p class="failure-desc">
+            Agents confuse or misremember the procedural steps taken during task execution, 
+            leading to redundant actions or skipping critical steps.
+          </p>
+          <div class="gallery-grid">
+            <div class="gallery-item full-width">
+              <a href="images/failure-analysis/process-memory-hallucination.png" class="gallery-link" data-lightbox="failures">
+                <img src="images/failure-analysis/process-memory-hallucination.png" alt="Process Memory Hallucination">
+              </a>
+              <div class="gallery-caption">
+                <h5>Process Memory Hallucination Example</h5>
+                <p>Agent loses track of completed steps and attempts to repeat or skip actions incorrectly.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure Mode 4: Output Memory Hallucination -->
+        <div class="failure-card mb-4">
+          <div class="failure-header">
+            <span class="failure-badge memory">4</span>
+            <h3 class="failure-title">Output Memory Hallucination</h3>
+          </div>
+          <p class="failure-desc">
+            Agents produce outputs that don't match the information they observed, 
+            indicating corruption during the retrieval or generation phase.
+          </p>
+          <div class="gallery-grid">
+            <div class="gallery-item full-width">
+              <a href="images/failure-analysis/output-memory-hallucination.png" class="gallery-link" data-lightbox="failures">
+                <img src="images/failure-analysis/output-memory-hallucination.png" alt="Output Memory Hallucination">
+              </a>
+              <div class="gallery-caption">
+                <h5>Output Memory Hallucination Example</h5>
+                <p>Agent's output doesn't match the information that was correctly observed and stored.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure Mode 5: Knowledge Deficiency -->
+        <div class="failure-card mb-4">
+          <div class="failure-header">
+            <span class="failure-badge knowledge">5</span>
+            <h3 class="failure-title">Knowledge Deficiency</h3>
+          </div>
+          <p class="failure-desc">
+            Agents lack the domain knowledge or application-specific understanding required to complete the task, 
+            such as not knowing how to navigate specific app interfaces.
+          </p>
+          <div class="gallery-grid">
+            <div class="gallery-item full-width">
+              <a href="images/failure-analysis/knowledge-deficiency.png" class="gallery-link" data-lightbox="failures">
+                <img src="images/failure-analysis/knowledge-deficiency.png" alt="Knowledge Deficiency">
+              </a>
+              <div class="gallery-caption">
+                <h5>Knowledge Deficiency Example</h5>
+                <p>Agent fails due to lack of understanding of application-specific features or workflows.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure Mode 6: Intent Misunderstanding -->
+        <div class="failure-card mb-4">
+          <div class="failure-header">
+            <span class="failure-badge intent">6</span>
+            <h3 class="failure-title">Intent Misunderstanding</h3>
+          </div>
+          <p class="failure-desc">
+            Agents misinterpret the task goal or user intent, leading to correct execution of the wrong task.
+          </p>
+          <div class="gallery-grid">
+            <div class="gallery-item full-width">
+              <a href="images/failure-analysis/intent-misunderstanding.png" class="gallery-link" data-lightbox="failures">
+                <img src="images/failure-analysis/intent-misunderstanding.png" alt="Intent Misunderstanding">
+              </a>
+              <div class="gallery-caption">
+                <h5>Intent Misunderstanding Example</h5>
+                <p>Agent correctly executes actions but towards the wrong goal due to task misinterpretation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure Mode 7: Other -->
+        <div class="failure-card mb-4">
+          <div class="failure-header">
+            <span class="failure-badge other">7</span>
+            <h3 class="failure-title">Other Failures</h3>
+          </div>
+          <p class="failure-desc">
+            Miscellaneous failures including technical errors, environment issues, and edge cases 
+            that don't fit the above categories.
+          </p>
+          <div class="gallery-grid">
+            <div class="gallery-item full-width">
+              <a href="images/failure-analysis/other-failures.png" class="gallery-link" data-lightbox="failures">
+                <img src="images/failure-analysis/other-failures.png" alt="Other Failures">
+              </a>
+              <div class="gallery-caption">
+                <h5>Other Failure Example</h5>
+                <p>Miscellaneous failure cases including technical and environmental issues.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Design Implications -->
+      <section class="gallery-section mb-5">
+        <h2 class="section-title">Design Implications</h2>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4">
+            <div class="implication-card">
+              <h4><i class="bi bi-cpu"></i> Multi-Granularity Memory Buffers</h4>
+              <p>Implement hierarchical memory with separate stores for procedural knowledge and factual information to reduce cross-contamination.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="implication-card">
+              <h4><i class="bi bi-diagram-3"></i> Hierarchical Task Decomposition</h4>
+              <p>Develop persistent goal tracking with hierarchical planning to mitigate process memory hallucination across application boundaries.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="implication-card">
+              <h4><i class="bi bi-clock-history"></i> Strategic Long-Context Utilization</h4>
+              <p>Leverage long-context capabilities beyond naive conversation history concatenation for memory management.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="implication-card">
+              <h4><i class="bi bi-brain"></i> Explicit Long-Term Memory</h4>
+              <p>Implement dedicated cross-session memory mechanisms for experience accumulation (Agent-S2 achieves 21.5% FRR vs 0.8-4.4% without).</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="implication-card">
+              <h4><i class="bi bi-intersect"></i> Hybrid Architectures</h4>
+              <p>Combine framework-level memory management with efficient end-to-end models to balance capability and computational cost.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Back Link -->
+      <div class="text-center mt-5">
+        <a href="eval-pipeline.html" class="btn btn-outline-primary btn-lg">
+          <i class="bi bi-arrow-left"></i> View Eval Pipeline
+        </a>
+        <a href="index.html" class="btn btn-primary btn-lg ms-3">
+          Back to Home <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container text-center">
+      <p>&copy; 2026 MemGUI-Bench Team. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

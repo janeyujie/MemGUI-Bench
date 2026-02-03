@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MemGUI-Eval | MemGUI-Bench</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/gallery.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <img src="assets/favicon.png" alt="MemGUI-Bench" class="brand-icon">
+        <span class="brand-text">MemGUI-Bench</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html#overview">Overview</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#benchmark">Benchmark</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#results">Results</a></li>
+          <li class="nav-item"><a class="nav-link" href="leaderboard.html">Leaderboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="submission.html">Submit</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#citation">Citation</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">MemGUI-Eval</h1>
+      <p class="page-subtitle">Progressive Scrutiny Evaluation for Memory-Intensive GUI Tasks</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="section-padding">
+    <div class="container">
+      
+      <!-- Overview & Comparison Section (Side by Side) -->
+      <section class="gallery-section mb-5">
+        <div class="row g-4 align-items-stretch">
+          <div class="col-lg-6">
+            <div class="eval-card h-100">
+              <h4 class="eval-card-title">Pipeline Overview</h4>
+              <div class="eval-card-img">
+                <a href="images/eval-pipeline/eval-pipeline-overview.png" data-lightbox="eval">
+                  <img src="images/eval-pipeline/eval-pipeline-overview.png" alt="MemGUI-Eval Pipeline Overview">
+                </a>
+              </div>
+              <p class="eval-card-desc">
+                <strong>Three-Stage Progressive Scrutiny:</strong> Cost-effective triage → Full semantic analysis → Targeted visual verification. 
+                Four specialized agents work together achieving <strong>95.9% F1-score</strong> at only <strong>$0.031/trajectory</strong>.
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="eval-card h-100">
+              <h4 class="eval-card-title">Comparison with Existing Approaches</h4>
+              <div class="eval-card-img">
+                <a href="images/eval-pipeline/evaluator-comparison.png" data-lightbox="eval">
+                  <img src="images/eval-pipeline/evaluator-comparison.png" alt="Evaluator Comparison">
+                </a>
+              </div>
+              <p class="eval-card-desc">
+                Traditional methods range from <strong>rigid rule-based matching</strong> (limited coverage) to 
+                <strong>"LLM-as-Judge"</strong> approaches that overwhelm models with complete trajectories (high cost, low accuracy).
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stage Examples -->
+      <section class="gallery-section mb-5">
+        <h2 class="section-title">Stage-by-Stage Examples</h2>
+        
+        <!-- Stage 1 -->
+        <div class="stage-section mb-5">
+          <div class="stage-header">
+            <span class="stage-number">1</span>
+            <div class="stage-info">
+              <h3>Cost-Effective Triage</h3>
+              <p>Rapidly processes straightforward cases using minimal evidence (last 3 screenshots). Concludes "success" only when evidence irrefutably demonstrates task completion.</p>
+            </div>
+          </div>
+          <div class="stage-example">
+            <a href="images/eval-pipeline/stage1-success.png" data-lightbox="stages">
+              <img src="images/eval-pipeline/stage1-success.png" alt="Stage 1 Success Example">
+            </a>
+          </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="stage-section mb-5">
+          <div class="stage-header">
+            <span class="stage-number">2</span>
+            <div class="stage-info">
+              <h3>Full Semantic Analysis</h3>
+              <p>When triage is inconclusive, conducts comprehensive semantic analysis. Step Descriptor generates detailed descriptions, Semantic Judge synthesizes all context.</p>
+            </div>
+          </div>
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <div class="stage-example">
+                <a href="images/eval-pipeline/stage2-success.png" data-lightbox="stages">
+                  <img src="images/eval-pipeline/stage2-success.png" alt="Stage 2 Success">
+                </a>
+                <span class="example-label success">Success Case</span>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="stage-example">
+                <a href="images/eval-pipeline/stage2-failed.png" data-lightbox="stages">
+                  <img src="images/eval-pipeline/stage2-failed.png" alt="Stage 2 Failed">
+                </a>
+                <span class="example-label failed">Failed Case + IRR</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="stage-section mb-5">
+          <div class="stage-header">
+            <span class="stage-number">3</span>
+            <div class="stage-info">
+              <h3>Targeted Visual Verification</h3>
+              <p>Core innovation: provides precisely the visual evidence the model actively requested via <code>required_steps</code>, rather than overwhelming it with all screenshots.</p>
+            </div>
+          </div>
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <div class="stage-example">
+                <a href="images/eval-pipeline/stage3-success.png" data-lightbox="stages">
+                  <img src="images/eval-pipeline/stage3-success.png" alt="Stage 3 Success">
+                </a>
+                <span class="example-label success">Success Case</span>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="stage-example">
+                <a href="images/eval-pipeline/stage3-failed.png" data-lightbox="stages">
+                  <img src="images/eval-pipeline/stage3-failed.png" alt="Stage 3 Failed">
+                </a>
+                <span class="example-label failed">Failed Case + IRR</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Back Link -->
+      <div class="text-center mt-5">
+        <a href="index.html" class="btn btn-outline-primary btn-lg">
+          <i class="bi bi-arrow-left"></i> Back to Home
+        </a>
+        <a href="failure-analysis.html" class="btn btn-primary btn-lg ms-3">
+          View Failure Analysis <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container text-center">
+      <p>&copy; 2026 MemGUI-Bench Team. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
