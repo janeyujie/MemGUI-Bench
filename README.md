@@ -13,19 +13,23 @@ A memory-centric benchmark for evaluating Mobile GUI Agents in dynamic environme
 Use our pre-configured Docker image with all dependencies installed:
 
 ```bash
-# Pull the image
-docker pull memguibench/memgui-bench:latest
+# Pull the image (public, no login required)
+sudo docker pull \
+  crpi-6p9eo5da91i2tx5v.cn-hangzhou.personal.cr.aliyuncs.com/memgui/memgui-bench:26020301
 
-# Run container with GPU support
-docker run -it --gpus all \
-  -v $(pwd)/results:/workspace/results \
-  -p 5555:5555 \
-  memguibench/memgui-bench:latest
+# Run container
+sudo docker run -it --privileged \
+  --name memgui-bench \
+  -w /root/MemGUI-Bench \
+  crpi-6p9eo5da91i2tx5v.cn-hangzhou.personal.cr.aliyuncs.com/memgui/memgui-bench:26020301 \
+  bash
 
-# Inside container
-cd /workspace/MemGUI-Bench
+# Inside container, you're already in /root/MemGUI-Bench
+# Run the benchmark
 python run.py
 ```
+
+**Note**: The `--privileged` flag is required for Android emulator support.
 
 The Docker image includes:
 
@@ -64,7 +68,7 @@ cd MemGUI-Bench
 # git submodule update --init --recursive
 
 # Run setup script
-./setup.sh
+   ./setup.sh
 
 # Configure
 cp config.yaml.example.opensource config.yaml
@@ -77,7 +81,7 @@ cp config.yaml.example.opensource config.yaml
 
 Edit `config.yaml` to match your environment:
 
-```yaml
+     ```yaml
 # Part 1: Environment Mode
 ENVIRONMENT_MODE: "local"  # "local" or "docker"
 
