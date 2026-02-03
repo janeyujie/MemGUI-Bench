@@ -2,11 +2,32 @@
 
 A memory-centric benchmark for evaluating Mobile GUI Agents in dynamic environments.
 
-**[Paper](https://arxiv.org/) | [Website](https://lgy0404.github.io/MemGUI-Bench/) | [Leaderboard](https://lgy0404.github.io/MemGUI-Bench/leaderboard.html)**
+![Tasks](https://img.shields.io/badge/Tasks-128-blue)
+![Apps](https://img.shields.io/badge/Apps-26-green)
+![Scenarios](https://img.shields.io/badge/Scenarios-68-orange)
+![Avg_Steps](https://img.shields.io/badge/Avg_Steps-36-red)
+![Cross_App](https://img.shields.io/badge/Cross_App-1~4_apps-purple)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
+
+**[📄 Paper](https://arxiv.org/) | [🌐 Website](https://lgy0404.github.io/MemGUI-Bench/) | [🏆 Leaderboard](https://lgy0404.github.io/MemGUI-Bench/leaderboard.html) | [📦 Trajectories](https://huggingface.co/datasets/lgy0404/memgui-bench-trajs)**
 
 ---
 
-## Environment Setup
+## 📋 Table of Contents
+
+- [🐳 Environment Setup](#-environment-setup)
+- [⚙️ Configuration](#️-configuration)
+- [🚀 Usage](#-usage)
+- [📁 Benchmark Session](#-benchmark-session)
+- [📊 Metrics](#-metrics)
+- [🤖 Adding a New Agent](#-adding-a-new-agent)
+- [📤 Leaderboard Submission](#-leaderboard-submission)
+- [📚 Dataset](#-dataset)
+- [📝 Citation](#-citation)
+
+---
+
+## 🐳 Environment Setup
 
 ### Option 1: Docker (Recommended)
 
@@ -25,14 +46,12 @@ sudo docker run -it --privileged \
   bash
 
 # Inside container, you're already in /root/MemGUI-Bench
-# Run the benchmark
 python run.py
 ```
 
-**Note**: The `--privileged` flag is required for Android emulator support.
+> **Note**: The `--privileged` flag is required for Android emulator support.
 
 The Docker image includes:
-
 - Pre-configured Android emulator with MemGUI-AVD
 - All required conda environments
 - ADB and Android SDK tools
@@ -41,12 +60,14 @@ The Docker image includes:
 
 For developers who prefer local installation:
 
+<details>
+<summary><b>Click to expand local setup instructions</b></summary>
+
 #### Prerequisites
 
 1. **Conda**: Install from [conda.io](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)
 2. **Android Debug Bridge (ADB)**: Install from [Android Developer](https://developer.android.com/tools/adb) and add to PATH
 3. **Android Studio & AVD**:
-
    - Download and install [Android Studio](https://developer.android.com/studio)
    - Download the pre-configured MemGUI-AVD emulator snapshot:
      - **Download**: [Baidu Netdisk](https://pan.baidu.com/s/11MhISCYTV5JJPjf9FALy2g?pwd=tfnb) (Code: `tfnb`)
@@ -68,20 +89,44 @@ cd MemGUI-Bench
 # git submodule update --init --recursive
 
 # Run setup script
-   ./setup.sh
+./setup.sh
 
 # Configure
 cp config.yaml.example.opensource config.yaml
 # Edit config.yaml with your paths
 ```
 
+</details>
+
 ---
 
-## Configuration
+## ⚙️ Configuration
 
 Edit `config.yaml` to match your environment:
 
-     ```yaml
+```yaml
+# Environment Mode
+ENVIRONMENT_MODE: "local"  # "local" or "docker"
+
+# Experiment Settings
+AGENT_NAME: "Qwen3VL"
+DATASET_PATH: "./data/memgui-tasks-all.csv"
+SESSION_ID_SUFFIX: "my-experiment"
+
+# API & Parallelism
+BASE_URL: "https://api.openai.com/v1"
+NUM_OF_EMULATOR: 4
+MAX_EVAL_SUBPROCESS: 8
+
+# Model API Keys
+QWEN_API_KEY: "your-api-key"
+QWEN_MODEL: "qwen3-vl-8b"
+```
+
+<details>
+<summary><b>Full configuration example (for local mode)</b></summary>
+
+```yaml
 # Part 1: Environment Mode
 ENVIRONMENT_MODE: "local"  # "local" or "docker"
 
@@ -110,9 +155,11 @@ _MODE_PRESETS:
       _SOURCE_AVD_HOME: "/path/to/.android/avd"
 ```
 
+</details>
+
 ---
 
-## Usage
+## 🚀 Usage
 
 ### Running the Benchmark
 
@@ -123,15 +170,15 @@ python run.py
 
 ### Command-line Arguments
 
-| Argument            | Default  | Description                                |
-| ------------------- | -------- | ------------------------------------------ |
-| `--agents`        | config   | Agent name(s), comma-separated             |
-| `--mode`          | `full` | `full` (exec+eval) / `exec` / `eval` |
-| `--session_id`    | config   | Session identifier for results             |
-| `--task_id`       | None     | Run specific task only                     |
-| `--max_attempts`  | 3        | Max attempts per task                      |
-| `--overwrite`     | False    | Overwrite existing results                 |
-| `--no_concurrent` | False    | Disable parallel evaluation                |
+| Argument | Default | Description |
+|----------|---------|-------------|
+| `--agents` | config | Agent name(s), comma-separated |
+| `--mode` | `full` | `full` (exec+eval) / `exec` / `eval` |
+| `--session_id` | config | Session identifier for results |
+| `--task_id` | None | Run specific task only |
+| `--max_attempts` | 3 | Max attempts per task |
+| `--overwrite` | False | Overwrite existing results |
+| `--no_concurrent` | False | Disable parallel evaluation |
 
 ### Examples
 
@@ -154,7 +201,7 @@ python run.py --no_concurrent
 
 ---
 
-## Benchmark Session
+## 📁 Benchmark Session
 
 Each `session_id` creates an isolated benchmark folder in `./results/`.
 
@@ -163,6 +210,9 @@ Each `session_id` creates an isolated benchmark folder in `./results/`.
 - Results accumulate across runs
 
 ### Output Structure
+
+<details>
+<summary><b>Click to expand output directory structure</b></summary>
 
 ```
 results/session-{session_id}/
@@ -198,27 +248,29 @@ results/session-{session_id}/
             └── step_*_description.json    # Step-by-step analysis
 ```
 
+</details>
+
 ---
 
-## Metrics
+## 📊 Metrics
 
 The benchmark automatically computes:
 
-| Metric               | Description                                  |
-| -------------------- | -------------------------------------------- |
-| **Pass@K**     | Success rate within K attempts               |
-| **IRR**        | Information Retrieval Rate (memory accuracy) |
-| **FRR**        | Failure Recovery Rate (learning from errors) |
-| **MTPR**       | Memory Task Performance Ratio                |
-| **Step Ratio** | Agent steps / Golden steps                   |
-| **Time/Step**  | Average execution time per step              |
-| **Cost/Step**  | API cost per step (if applicable)            |
+| Metric | Description |
+|--------|-------------|
+| **Pass@K** | Success rate within K attempts |
+| **IRR** | Information Retrieval Rate (memory accuracy) |
+| **FRR** | Failure Recovery Rate (learning from errors) |
+| **MTPR** | Memory Task Performance Ratio |
+| **Step Ratio** | Agent steps / Golden steps |
+| **Time/Step** | Average execution time per step |
+| **Cost/Step** | API cost per step (if applicable) |
 
 Results are saved to `metrics_summary.json` and `{agent_name}.json` (leaderboard format).
 
 ---
 
-## Adding a New Agent
+## 🤖 Adding a New Agent
 
 ### Step 1: Add Config
 
@@ -248,7 +300,6 @@ class MyAgent(AndroidWorldAgent):
 ### Step 3: Output Format
 
 Your agent must output:
-
 - Screenshots: `0.png`, `1.png`, ... (one per step)
 - Log file: `log.json` with execution summary
 
@@ -256,7 +307,7 @@ The benchmark handles evaluation automatically.
 
 ---
 
-## Leaderboard Submission
+## 📤 Leaderboard Submission
 
 After running the benchmark:
 
@@ -267,15 +318,14 @@ Find `{agent_name}.json` in your session folder and fill in metadata:
 ```json
 {
   "name": "YourAgent",
-  "backbone": "GPT-4V",           // or "-" for fine-tuned models
-  "type": "Agentic Workflow",     // or "Agent-as-a-Model"
+  "backbone": "GPT-4V",
+  "type": "Agentic Workflow",
   "institution": "Your Institution",
   "date": "2026-02-03",
   "paperLink": "https://arxiv.org/...",
   "codeLink": "https://github.com/...",
   "hasUITree": true,
-  "hasLongTermMemory": false,
-  // ... auto-generated metrics below (do not modify)
+  "hasLongTermMemory": false
 }
 ```
 
@@ -286,7 +336,7 @@ Submit via Pull Request to [lgy0404/MemGUI-Bench](https://github.com/lgy0404/Mem
 Compress and submit via PR to [lgy0404/memgui-bench-trajs](https://huggingface.co/datasets/lgy0404/memgui-bench-trajs):
 
 ```bash
-# Compress session folder (filename should match your agent JSON, e.g., mobile-agent-v2.zip)
+# Compress session folder
 cd results && zip -r your-agent-name.zip session-{id}
 
 # Upload via HuggingFace Web UI:
@@ -299,19 +349,19 @@ See [submission guide](https://lgy0404.github.io/MemGUI-Bench/submission.html) f
 
 ---
 
-## Dataset
+## 📚 Dataset
 
-| File                     | Tasks | Description              |
-| ------------------------ | ----- | ------------------------ |
-| `memgui-tasks-all.csv` | 128   | Full benchmark           |
-| `memgui-tasks-40.csv`  | 40    | Subset for quick testing |
-| `memgui-debug-6.csv`   | 6     | Debug set                |
+| File | Tasks | Description |
+|------|-------|-------------|
+| `memgui-tasks-all.csv` | 128 | Full benchmark |
+| `memgui-tasks-40.csv` | 40 | Subset for quick testing |
+| `memgui-debug-6.csv` | 6 | Debug set |
 
 Task fields: `task_identifier`, `task_description`, `task_app`, `num_apps`, `requires_ui_memory`, `task_difficulty`, `golden_steps`
 
 ---
 
-## Citation
+## 📝 Citation
 
 ```bibtex
 @article{memguibench2026,
@@ -322,6 +372,8 @@ Task fields: `task_identifier`, `task_description`, `task_app`, `num_apps`, `req
 }
 ```
 
-## License
+---
+
+## 📄 License
 
 [MIT License](LICENSE)
