@@ -21,6 +21,9 @@
     <a href="https://lgy0404.github.io/MemGUI-Bench/leaderboard.html">
       <img src="https://img.shields.io/badge/Leaderboard-View-orange?logo=star&logoColor=white" alt="Leaderboard"/>
     </a>
+    <a href="https://huggingface.co/datasets/lgy0404/MemGUI-Bench">
+      <img src="https://img.shields.io/badge/Tasks-HuggingFace-yellow?logo=huggingface&logoColor=white" alt="Tasks"/>
+    </a>
     <a href="https://huggingface.co/datasets/lgy0404/memgui-bench-trajs">
       <img src="https://img.shields.io/badge/Trajectories-HuggingFace-yellow?logo=huggingface&logoColor=white" alt="Trajectories"/>
     </a>
@@ -45,6 +48,7 @@
 ---
 
 ## 📢 Updates
+- **2026-02-09**: 🗂️ Benchmark tasks now available on HuggingFace: [lgy0404/MemGUI-Bench](https://huggingface.co/datasets/lgy0404/MemGUI-Bench) 🔥
 - **2026-02-09**: 📄 Paper released on arXiv! Check out our paper: [arXiv:2602.06075](https://arxiv.org/abs/2602.06075) 🔥
 - **2026-02-03**: Initial release of MemGUI-Bench benchmark. Check out our [website](https://lgy0404.github.io/MemGUI-Bench/)🔥.
 
