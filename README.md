@@ -38,8 +38,9 @@
 - [📊 Metrics](#-metrics)
 - [🤖 Adding a New Agent](#-adding-a-new-agent)
 - [📤 Leaderboard Submission](#-leaderboard-submission)
-- [📚 Dataset](#-dataset)
+- [📚 Tasks](#tasks)
 - [📝 Citation](#-citation)
+- [📧 Contact](#-contact)
 
 ---
 
@@ -435,6 +436,12 @@ See [submission guide](https://lgy0404.github.io/MemGUI-Bench/submission.html) f
   url={https://arxiv.org/abs/2602.06075},
 }
 ```
+
+---
+
+## 📧 Contact
+
+For questions, issues, or collaborations, please contact: **guangyiliu@zju.edu.cn**
 
 ---
 
