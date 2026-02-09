@@ -64,3 +64,4 @@ def gen_sign_headers(app_id, app_key, method, uri, query):
         'X-AI-GATEWAY-SIGNED-HEADERS': "x-ai-gateway-app-id;x-ai-gateway-timestamp;x-ai-gateway-nonce",
         'X-AI-GATEWAY-SIGNATURE': signature
     }
+

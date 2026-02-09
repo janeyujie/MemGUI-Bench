@@ -30,7 +30,7 @@ import numpy as np
 from PIL import Image
 import requests
 
-from android_world.utils.vivo.vivo_api import (
+from android_world.utils.llm.llm_api import (
     inference_chat_gemini_2_image,
     inference_chat_gemini_1_image,
     inference_chat_gemini_wo_image,
