@@ -1,7 +1,7 @@
 <div align="center">
   <img src="./assets/memgui-bench-logo.drawio.png" alt="Banner" />
-  
-  <p>
+
+<p>
     <img src="https://img.shields.io/badge/Tasks-128-blue" alt="Tasks"/>
     <img src="https://img.shields.io/badge/Apps-26-green" alt="Apps"/>
     <img src="https://img.shields.io/badge/Scenarios-68-orange" alt="Scenarios"/>
@@ -11,7 +11,7 @@
     <img src="https://img.shields.io/badge/License-MIT-lightgrey" alt="License"/>
   </p>
 
-  <p>
+<p>
     <a href="https://arxiv.org/abs/2602.06075">
       <img src="https://img.shields.io/badge/Paper-arXiv%3A2602.06075-blue?logo=arxiv&logoColor=white" alt="Paper"/>
     </a>
@@ -44,6 +44,11 @@
 ---
 
 ## 🐳 Environment Setup
+
+<div align="center">
+  <img src="assets/unified-architecture.drawio.png" alt="Task Distribution" width="100%" />
+</div>
+
 
 ### Option 1: Docker (Recommended)
 
