@@ -352,8 +352,7 @@ See [submission guide](https://lgy0404.github.io/MemGUI-Bench/submission.html) f
 
 ---
 
-## 📚 
-
+## 📚Tasks
 
 <div align="left">
   <img src="assets/task-distributions.drawio.png" alt="Task Distribution" width="70%" />
