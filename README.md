@@ -1,16 +1,31 @@
-# MemGUI-Bench
+<div align="center">
+  <img src="./assets/memgui-bench-logo.drawio.png" alt="Banner" />
+  
+  <p>
+    <img src="https://img.shields.io/badge/Tasks-128-blue" alt="Tasks"/>
+    <img src="https://img.shields.io/badge/Apps-26-green" alt="Apps"/>
+    <img src="https://img.shields.io/badge/Scenarios-68-orange" alt="Scenarios"/>
+    <img src="https://img.shields.io/badge/Avg_Steps-36-red" alt="Avg Steps"/>
+    <img src="https://img.shields.io/badge/Cross_App-1~4_apps-purple" alt="Cross App"/>
+    <img src="https://img.shields.io/badge/Memory_Intensive-89.8%25-brightgreen" alt="Memory Intensive"/>
+    <img src="https://img.shields.io/badge/License-MIT-lightgrey" alt="License"/>
+  </p>
 
-A memory-centric benchmark for evaluating Mobile GUI Agents in dynamic environments.
-
-![Tasks](https://img.shields.io/badge/Tasks-128-blue)
-![Apps](https://img.shields.io/badge/Apps-26-green)
-![Scenarios](https://img.shields.io/badge/Scenarios-68-orange)
-![Avg_Steps](https://img.shields.io/badge/Avg_Steps-36-red)
-![Cross_App](https://img.shields.io/badge/Cross_App-1~4_apps-purple)
-![Memory_Intensive](https://img.shields.io/badge/Memory_Intensive-89.8%25-brightgreen)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
-
-**[📄 Paper](https://arxiv.org/abs/2602.06075) | [🌐 Website](https://lgy0404.github.io/MemGUI-Bench/) | [🏆 Leaderboard](https://lgy0404.github.io/MemGUI-Bench/leaderboard.html) | [📦 Trajectories](https://huggingface.co/datasets/lgy0404/memgui-bench-trajs)**
+  <p>
+    <a href="https://arxiv.org/abs/2602.06075">
+      <img src="https://img.shields.io/badge/Paper-arXiv%3A2602.06075-blue?logo=arxiv&logoColor=white" alt="Paper"/>
+    </a>
+    <a href="https://lgy0404.github.io/MemGUI-Bench/">
+      <img src="https://img.shields.io/badge/Website-Online-blueviolet?logo=google-chrome&logoColor=white" alt="Website"/>
+    </a>
+    <a href="https://lgy0404.github.io/MemGUI-Bench/leaderboard.html">
+      <img src="https://img.shields.io/badge/Leaderboard-View-orange?logo=star&logoColor=white" alt="Leaderboard"/>
+    </a>
+    <a href="https://huggingface.co/datasets/lgy0404/memgui-bench-trajs">
+      <img src="https://img.shields.io/badge/Trajectories-HuggingFace-yellow?logo=huggingface&logoColor=white" alt="Trajectories"/>
+    </a>
+  </p>
+</div>
 
 ---
 
