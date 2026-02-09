@@ -11,6 +11,7 @@
     "seeact",
     "t3a",
     "ui-tars-1.5-7b",
-    "ui-venus-7b"
+    "ui-venus-7b",
+    "qwen3-vl-8b-instruct"
   ]
 }
