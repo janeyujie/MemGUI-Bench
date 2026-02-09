@@ -43,6 +43,11 @@
 
 ---
 
+## 📢 Updates
+- **2026-02-09**: 📄 Paper released on arXiv! Check out our paper: [arXiv:2602.06075](https://arxiv.org/abs/2602.06075) 🔥
+- **2026-02-03**: Initial release of MemGUI-Bench benchmark. Check out our [website](https://lgy0404.github.io/MemGUI-Bench/)🔥.
+
+
 ## 🐳 Environment Setup
 
 <div align="center">
