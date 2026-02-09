@@ -10,7 +10,7 @@ A memory-centric benchmark for evaluating Mobile GUI Agents in dynamic environme
 ![Memory_Intensive](https://img.shields.io/badge/Memory_Intensive-89.8%25-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-**[📄 Paper](https://arxiv.org/) | [🌐 Website](https://lgy0404.github.io/MemGUI-Bench/) | [🏆 Leaderboard](https://lgy0404.github.io/MemGUI-Bench/leaderboard.html) | [📦 Trajectories](https://huggingface.co/datasets/lgy0404/memgui-bench-trajs)**
+**[📄 Paper](https://arxiv.org/abs/2602.06075) | [🌐 Website](https://lgy0404.github.io/MemGUI-Bench/) | [🏆 Leaderboard](https://lgy0404.github.io/MemGUI-Bench/leaderboard.html) | [📦 Trajectories](https://huggingface.co/datasets/lgy0404/memgui-bench-trajs)**
 
 ---
 
@@ -365,11 +365,14 @@ Task fields: `task_identifier`, `task_description`, `task_app`, `num_apps`, `req
 ## 📝 Citation
 
 ```bibtex
-@article{memguibench2026,
-  title={MemGUI-Bench: Benchmarking Memory of Mobile GUI Agents},
-  author={Liu, Guangyi and Zhao, Pengxiang and Liang, Yaozhen and others},
-  journal={arXiv preprint},
-  year={2026}
+@misc{liu2026memguibenchbenchmarkingmemorymobile,
+  title={MemGUI-Bench: Benchmarking Memory of Mobile GUI Agents in Dynamic Environments},
+  author={Guangyi Liu and Pengxiang Zhao and Yaozhen Liang and Qinyi Luo and Shunye Tang and Yuxiang Chai and Weifeng Lin and Han Xiao and WenHao Wang and Siheng Chen and Zhengxi Lu and Gao Wu and Hao Wang and Liang Liu and Yong Liu},
+  year={2026},
+  eprint={2602.06075},
+  archivePrefix={arXiv},
+  primaryClass={cs.DC},
+  url={https://arxiv.org/abs/2602.06075},
 }
 ```
 
