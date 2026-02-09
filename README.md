@@ -53,6 +53,7 @@ python run.py
 > **Note**: The `--privileged` flag is required for Android emulator support.
 
 The Docker image includes:
+
 - Pre-configured Android emulator with MemGUI-AVD
 - All required conda environments
 - ADB and Android SDK tools
@@ -171,15 +172,15 @@ python run.py
 
 ### Command-line Arguments
 
-| Argument | Default | Description |
-|----------|---------|-------------|
-| `--agents` | config | Agent name(s), comma-separated |
-| `--mode` | `full` | `full` (exec+eval) / `exec` / `eval` |
-| `--session_id` | config | Session identifier for results |
-| `--task_id` | None | Run specific task only |
-| `--max_attempts` | 3 | Max attempts per task |
-| `--overwrite` | False | Overwrite existing results |
-| `--no_concurrent` | False | Disable parallel evaluation |
+| Argument            | Default  | Description                                |
+| ------------------- | -------- | ------------------------------------------ |
+| `--agents`        | config   | Agent name(s), comma-separated             |
+| `--mode`          | `full` | `full` (exec+eval) / `exec` / `eval` |
+| `--session_id`    | config   | Session identifier for results             |
+| `--task_id`       | None     | Run specific task only                     |
+| `--max_attempts`  | 3        | Max attempts per task                      |
+| `--overwrite`     | False    | Overwrite existing results                 |
+| `--no_concurrent` | False    | Disable parallel evaluation                |
 
 ### Examples
 
@@ -257,15 +258,15 @@ results/session-{session_id}/
 
 The benchmark automatically computes:
 
-| Metric | Description |
-|--------|-------------|
-| **Pass@K** | Success rate within K attempts |
-| **IRR** | Information Retrieval Rate (memory accuracy) |
-| **FRR** | Failure Recovery Rate (learning from errors) |
-| **MTPR** | Memory Task Performance Ratio |
-| **Step Ratio** | Agent steps / Golden steps |
-| **Time/Step** | Average execution time per step |
-| **Cost/Step** | API cost per step (if applicable) |
+| Metric               | Description                                  |
+| -------------------- | -------------------------------------------- |
+| **Pass@K**     | Success rate within K attempts               |
+| **IRR**        | Information Retrieval Rate (memory accuracy) |
+| **FRR**        | Failure Recovery Rate (learning from errors) |
+| **MTPR**       | Memory Task Performance Ratio                |
+| **Step Ratio** | Agent steps / Golden steps                   |
+| **Time/Step**  | Average execution time per step              |
+| **Cost/Step**  | API cost per step (if applicable)            |
 
 Results are saved to `metrics_summary.json` and `{agent_name}.json` (leaderboard format).
 
@@ -301,6 +302,7 @@ class MyAgent(AndroidWorldAgent):
 ### Step 3: Output Format
 
 Your agent must output:
+
 - Screenshots: `0.png`, `1.png`, ... (one per step)
 - Log file: `log.json` with execution summary
 
@@ -350,15 +352,49 @@ See [submission guide](https://lgy0404.github.io/MemGUI-Bench/submission.html) f
 
 ---
 
-## 📚 Dataset
+## 📚 
 
-| File | Tasks | Description |
-|------|-------|-------------|
-| `memgui-tasks-all.csv` | 128 | Full benchmark |
-| `memgui-tasks-40.csv` | 40 | Subset for quick testing |
-| `memgui-debug-6.csv` | 6 | Debug set |
 
-Task fields: `task_identifier`, `task_description`, `task_app`, `num_apps`, `requires_ui_memory`, `task_difficulty`, `golden_steps`
+<div align="center">
+  <img src="assets/task-distributions.drawio.png" alt="Task Distribution" width="70%" />
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>Tasks</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>memgui-tasks-all.csv</code></td>
+      <td align="center">128</td>
+      <td>Full benchmark</td>
+    </tr>
+    <tr>
+      <td><code>memgui-tasks-40.csv</code></td>
+      <td align="center">40</td>
+      <td>Subset for quick testing</td>
+    </tr>
+  </tbody>
+</table>
+
+<details>
+  <summary><strong>Task Fields</strong> (click to expand)</summary>
+
+<ul>
+    <li><code>task_identifier</code></li>
+    <li><code>task_description</code></li>
+    <li><code>task_app</code></li>
+    <li><code>num_apps</code></li>
+    <li><code>requires_ui_memory</code></li>
+    <li><code>task_difficulty</code></li>
+    <li><code>golden_steps</code></li>
+  </ul>
+
+</details>
 
 ---
 
