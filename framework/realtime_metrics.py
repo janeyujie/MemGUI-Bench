@@ -163,9 +163,18 @@ class MetricsCalculator:
             else:
                 self.df[f"completion_tokens_att_{i}"] = 0
             
-            # IRR
-            irr_col = f"{self.agent_name}_attempt_{i}_irr_percentage"
-            if irr_col in self.df.columns:
+            # IRR - try multiple possible column patterns
+            irr_col = None
+            irr_patterns = [
+                f"{self.agent_name}_direct_with_action_attempt_{i}_irr_percentage",
+                f"{self.agent_name}_attempt_{i}_irr_percentage",
+            ]
+            for pattern in irr_patterns:
+                if pattern in self.df.columns:
+                    irr_col = pattern
+                    break
+            
+            if irr_col:
                 self.df[f"irr_att_{i}"] = pd.to_numeric(self.df[irr_col], errors="coerce").fillna(0)
             else:
                 self.df[f"irr_att_{i}"] = 0
@@ -307,9 +316,10 @@ class MetricsCalculator:
         standard_df = self.df[~self.df["requires_ui_memory"]]
         
         # Average IRR (only for memory tasks, attempt 1)
+        # Include all tasks with IRR values (including IRR=0, which means no memory utilization)
         if not memory_df.empty:
             irr_values = memory_df["irr_att_1"]
-            valid_irr = irr_values[irr_values > 0]
+            valid_irr = irr_values[irr_values.notna()]
             avg_irr = valid_irr.mean() if len(valid_irr) > 0 else 0
             irr_count = len(valid_irr)
         else:
@@ -437,10 +447,11 @@ class MetricsCalculator:
                 results[f"pass_at_{k}_{diff_key}"] = rate
             
             # Calculate IRR for this difficulty level (only for memory tasks)
+            # Include all tasks with IRR values (including IRR=0)
             memory_diff_df = diff_df[diff_df["requires_ui_memory"]]
             if not memory_diff_df.empty:
                 irr_values = memory_diff_df["irr_att_1"]
-                valid_irr = irr_values[irr_values > 0]
+                valid_irr = irr_values[irr_values.notna()]
                 avg_irr = valid_irr.mean() if len(valid_irr) > 0 else 0
                 results[f"irr_{diff_key}"] = avg_irr
             else:
@@ -468,10 +479,11 @@ class MetricsCalculator:
                 results[f"pass_at_{k}_{apps_key}"] = rate
             
             # Calculate IRR for this app count (only for memory tasks)
+            # Include all tasks with IRR values (including IRR=0)
             memory_apps_df = apps_df[apps_df["requires_ui_memory"]]
             if not memory_apps_df.empty:
                 irr_values = memory_apps_df["irr_att_1"]
-                valid_irr = irr_values[irr_values > 0]
+                valid_irr = irr_values[irr_values.notna()]
                 avg_irr = valid_irr.mean() if len(valid_irr) > 0 else 0
                 results[f"irr_{apps_key}"] = avg_irr
             else:
