@@ -1,0 +1,69 @@
+{
+  "name": "Qwen3-VL-32B-Instruct",
+  "backbone": "Qwen3-VL-32B-Instruct",
+  "type": "Agent-as-a-Model",
+  "institution": "Alibaba",
+  "date": "2026-02-25",
+  "paperLink": "https://arxiv.org/abs/2511.21631",
+  "codeLink": "https://github.com/QwenLM/Qwen3-VL",
+  "hasUITree": false,
+  "hasLongTermMemory": false,
+  "crossApp": {
+    "app1": {
+      "p1": 25.0,
+      "p3": 35.7,
+      "irr": 15.4
+    },
+    "app2": {
+      "p1": 3.6,
+      "p3": 7.1,
+      "irr": 7.6
+    },
+    "app3": {
+      "p1": 2.9,
+      "p3": 14.7,
+      "irr": 9.5
+    },
+    "app4": {
+      "p1": 10.0,
+      "p3": 20.0,
+      "irr": 32.3
+    }
+  },
+  "difficulty": {
+    "easy": {
+      "p1": 18.8,
+      "p3": 27.1,
+      "irr": 11.25
+    },
+    "medium": {
+      "p1": 4.8,
+      "p3": 16.7,
+      "irr": 15.66
+    },
+    "hard": {
+      "p1": 0.0,
+      "p3": 2.6,
+      "irr": 6.68
+    }
+  },
+  "avg": {
+    "p1": 8.6,
+    "p3": 16.4
+  },
+  "metrics": {
+    "shortTerm": {
+      "irr": 11.3,
+      "mtpr": 0.09,
+      "stepRatio": 1.14,
+      "timePerStep": 7.8,
+      "costPerStep": 0.282
+    },
+    "longTerm": {
+      "frr": 6.4,
+      "stepRatio": 0.99,
+      "timePerStep": 7.7,
+      "costPerStep": 0.345
+    }
+  }
+}
