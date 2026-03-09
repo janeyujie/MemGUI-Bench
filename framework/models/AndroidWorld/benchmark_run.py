@@ -30,17 +30,9 @@ parser.add_argument(
 # )
 parser.add_argument("--lang", type=str, default="ENG")
 parser.add_argument("--openai_api_model", type=str, default="gpt-4o-2024-05-13")
-parser.add_argument(
-    "--openai_api_key",
-    type=str,
-    default="sk-W9CQEFwqBjnypGLGvdfbDFDChNSRfYL1TPrqBnDB9EQG9Umm",
-)
+parser.add_argument("--openai_api_key", type=str, default=None)
 parser.add_argument("--vivo_gemini_api_model", type=str, default="gemini-2.5-pro")
-parser.add_argument(
-    "--output_dir",
-    type=str,
-    default="/home/zpx/workspace/MemGUI-Rollout/./results/session-debug-memgui-v25091802/005-CameraTakePhoto/UITARS/attempt_1",
-)
+parser.add_argument("--output_dir", type=str, required=True)
 parser.add_argument("--max_rounds", type=int, default=20)
 parser.add_argument(
     "--agent",
@@ -68,21 +60,9 @@ parser.add_argument("--uitars_api_key", type=str, required=False)
 parser.add_argument("--uitars_model", type=str, required=False)
 parser.add_argument("--uitars_history_n", type=int, required=False)
 # M3A specific configuration parameters - no defaults, conditionally required
-parser.add_argument(
-    "--m3a_model", type=str, required=False, default="app-nu0fg7-1754119470355380516"
-)
-parser.add_argument(
-    "--m3a_base_url",
-    type=str,
-    required=False,
-    default="http://wanqing-api.corp.kuaishou.com/api/agent/v1/apps",
-)
-parser.add_argument(
-    "--m3a_api_key",
-    type=str,
-    required=False,
-    default="t725gx8u0kwz8sw9umuw7pvutm05mcl12g3p",
-)
+parser.add_argument("--m3a_model", type=str, required=False)
+parser.add_argument("--m3a_base_url", type=str, required=False)
+parser.add_argument("--m3a_api_key", type=str, required=False)
 # Qwen3VL specific configuration parameters - no defaults, conditionally required
 parser.add_argument("--qwen_base_url", type=str, required=False)
 parser.add_argument("--qwen_api_key", type=str, required=False)

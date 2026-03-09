@@ -61,19 +61,17 @@ def apply_mode_presets(config, verbose=False):
         "_RESULTS_DIR": "RESULTS_DIR",
     }
 
-    # Get BASE_URL from config (user-defined)
-    base_url = config.get(
-        "BASE_URL", "https://wanqing-api.corp.kuaishou.com/api/agent/v1/apps"
-    )
+    # Get BASE_URL from config (user-defined, no default to avoid leakage)
+    base_url = config.get("BASE_URL")
 
-    # Apply BASE_URL to all URL fields if they are null
+    # Apply BASE_URL to all URL fields if they are null (only when base_url is set)
     url_fields = [
         "QWEN_BASE_URL",
         "MEMGUI_STEP_DESC_BASE_URL",
         "MEMGUI_FINAL_DECISION_BASE_URL",
     ]
     for url_field in url_fields:
-        if config.get(url_field) is None:
+        if config.get(url_field) is None and base_url is not None:
             config[url_field] = base_url
 
     # Apply environment mode presets

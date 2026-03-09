@@ -26,23 +26,23 @@ try:
     MEMGUI_FINAL_DECISION_BASE_URL = _config.get("MEMGUI_FINAL_DECISION_BASE_URL")
     MEMGUI_FINAL_DECISION_MODEL = _config.get("MEMGUI_FINAL_DECISION_MODEL")
 except Exception as e:
-    # 如果读取配置失败，fallback到环境变量
+    # 如果读取配置失败，fallback到环境变量（仅通用变量，无默认 URL）
     print(
         f"Warning: Failed to load config.yaml, falling back to environment variables: {e}"
     )
-    MEMGUI_API_KEY = os.environ.get("WQ_API_KEY")
-    MEMGUI_STEP_DESC_BASE_URL = (
-        "https://wanqing-api.corp.kuaishou.com/api/agent/v1/apps"
-    )
-    MEMGUI_STEP_DESC_MODEL = None
-    MEMGUI_FINAL_DECISION_BASE_URL = (
-        "https://wanqing-api.corp.kuaishou.com/api/agent/v1/apps"
-    )
-    MEMGUI_FINAL_DECISION_MODEL = None
+    MEMGUI_API_KEY = os.environ.get("MEMGUI_API_KEY")
+    MEMGUI_STEP_DESC_BASE_URL = os.environ.get("MEMGUI_STEP_DESC_BASE_URL")
+    MEMGUI_STEP_DESC_MODEL = os.environ.get("MEMGUI_STEP_DESC_MODEL")
+    MEMGUI_FINAL_DECISION_BASE_URL = os.environ.get("MEMGUI_FINAL_DECISION_BASE_URL")
+    MEMGUI_FINAL_DECISION_MODEL = os.environ.get("MEMGUI_FINAL_DECISION_MODEL")
 
 if not MEMGUI_API_KEY:
     raise ValueError(
-        "MEMGUI_API_KEY not found in config.yaml or WQ_API_KEY not found in environment variables"
+        "MEMGUI_API_KEY not found in config.yaml or MEMGUI_API_KEY not set in environment"
+    )
+if not MEMGUI_FINAL_DECISION_BASE_URL:
+    raise ValueError(
+        "MEMGUI_FINAL_DECISION_BASE_URL not set in config.yaml or environment"
     )
 
 # 客户端缓存，避免重复创建
@@ -87,10 +87,10 @@ MODEL_PRICING = {
     },
 }
 
-# Default values for backward compatibility
+# Default values for backward compatibility (model from config, no hardcoded default)
 DEFAULT_MAX_RETRIES = 200
 DEFAULT_RETRY_DELAY = 2
-DEFAULT_MODEL = "app-nu0fg7-1754119470355380516"
+DEFAULT_MODEL = MEMGUI_FINAL_DECISION_MODEL
 # max_tokens is intentionally not set - let the model use its default
 DEFAULT_TEMPERATURE = 0.01
 
