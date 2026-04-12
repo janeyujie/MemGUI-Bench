@@ -19,16 +19,16 @@
 # Environment mode: "docker" (Docker environment) | "local" (local environment)
 #   - docker: Use Docker container paths (/root/...)
 #   - local: Use local development environment paths
-ENVIRONMENT_MODE: "local"
+ENVIRONMENT_MODE: "docker"
 
 # ==============================================================================
 # Part 2: Experiment Settings (Must configure for each experiment)
 # ==============================================================================
 # Agent name
-AGENT_NAME: "Qwen3VL"
+AGENT_NAME: "GeneralE2E"
 
 # Dataset path (must be specified, no default)
-DATASET_PATH: "./data/memgui-tasks-all.csv"
+DATASET_PATH: "./data/memgui-tasks-1.csv"
 
 # Session ID suffix (only specify the suffix part)
 # Prefix "memgui-" is automatically added
@@ -53,9 +53,9 @@ QWEN_API_KEY: "YOUR_API_KEY_HERE"  # Replace with your API Key
 QWEN_MODEL: "qwen/qwen3-vl-8b-instruct"  # Qwen3-VL-8B-Instruct openrouter
 
 # GeneralE2E model configuration
-GENERAL_E2E_API_KEY: "YOUR_API_KEY_HERE"  # Replace with your API Key
-GENERAL_E2E_MODEL: "gpt-4.1-mini"
-GENERAL_E2E_BASE_URL: null  # null means use BASE_URL
+GENERAL_E2E_API_KEY: ""  # Replace with your API Key
+GENERAL_E2E_MODEL: "qwen3.5-plus"
+GENERAL_E2E_BASE_URL: https://dashscope.aliyuncs.com/compatible-mode/v1  # null means use BASE_URL
 GENERAL_E2E_HISTORY_N: 3
 GENERAL_E2E_TEMPERATURE: 0.0
 GENERAL_E2E_MAX_TOKENS: 2048

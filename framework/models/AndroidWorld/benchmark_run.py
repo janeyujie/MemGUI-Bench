@@ -7,6 +7,7 @@ from android_world.agents import (
     ui_tars,
     ui_tars_1_5,
     m3a_multiturn,
+    general_e2e,
     qwen3_vl,
 )
 from android_world.env import env_launcher
@@ -47,6 +48,7 @@ parser.add_argument(
         "UITARS",
         "UITARS_1_5",
         "Qwen3VL",
+        "GeneralE2E",
     ],
     default="M3A_MultiTurn",
 )
@@ -67,6 +69,13 @@ parser.add_argument("--m3a_api_key", type=str, required=False)
 parser.add_argument("--qwen_base_url", type=str, required=False)
 parser.add_argument("--qwen_api_key", type=str, required=False)
 parser.add_argument("--qwen_model", type=str, required=False)
+# GeneralE2E specific configuration parameters - no defaults, conditionally required
+parser.add_argument("--general_e2e_base_url", type=str, required=False)
+parser.add_argument("--general_e2e_api_key", type=str, required=False)
+parser.add_argument("--general_e2e_model", type=str, required=False)
+parser.add_argument("--general_e2e_history_n", type=int, required=False)
+parser.add_argument("--general_e2e_temperature", type=float, required=False)
+parser.add_argument("--general_e2e_max_tokens", type=int, required=False)
 args = parser.parse_args()
 
 # os.environ['OPENAI_API_KEY'] = args.openai_api_key
@@ -130,6 +139,20 @@ def setup_agent(env):
             raise ValueError(f"--qwen_api_key is required for {args.agent} agent")
         if not args.qwen_model:
             raise ValueError(f"--qwen_model is required for {args.agent} agent")
+
+    if args.agent == "GeneralE2E":
+        if not args.general_e2e_base_url:
+            raise ValueError(
+                f"--general_e2e_base_url is required for {args.agent} agent"
+            )
+        if not (args.general_e2e_api_key or args.openai_api_key):
+            raise ValueError(
+                f"--general_e2e_api_key or --openai_api_key is required for {args.agent} agent"
+            )
+        if not args.general_e2e_model:
+            raise ValueError(
+                f"--general_e2e_model is required for {args.agent} agent"
+            )
 
     if args.agent == "M3A":
         # Create M3A config dict from command line arguments
@@ -230,6 +253,28 @@ def setup_agent(env):
         screenshot_key = "before_screenshot"
         grounded_action_key = "parsed_action"
         log_keys = ["action_output", "raw_response"]
+        raw_response_key = ["raw_response"]
+    elif args.agent == "GeneralE2E":
+        general_e2e_config = {
+            "GENERAL_E2E_BASE_URL": args.general_e2e_base_url,
+            "GENERAL_E2E_API_KEY": args.general_e2e_api_key or args.openai_api_key,
+            "GENERAL_E2E_MODEL": args.general_e2e_model,
+        }
+        if args.general_e2e_history_n is not None:
+            general_e2e_config["GENERAL_E2E_HISTORY_N"] = args.general_e2e_history_n
+        if args.general_e2e_temperature is not None:
+            general_e2e_config["GENERAL_E2E_TEMPERATURE"] = (
+                args.general_e2e_temperature
+            )
+        if args.general_e2e_max_tokens is not None:
+            general_e2e_config["GENERAL_E2E_MAX_TOKENS"] = (
+                args.general_e2e_max_tokens
+            )
+
+        agent = general_e2e.GeneralE2E(env, config=general_e2e_config)
+        screenshot_key = "before_screenshot"
+        grounded_action_key = "parsed_action"
+        log_keys = ["action_output", "raw_response", "thought", "raw_action"]
         raw_response_key = ["raw_response"]
     return agent, screenshot_key, grounded_action_key, log_keys, raw_response_key
 
@@ -489,6 +534,14 @@ def main():
                         enhanced_log_data = {}
                         prompt_tokens = 0
                         completion_tokens = 0
+                elif args.agent == "GeneralE2E":
+                    enhanced_log_data = {}
+                    if hasattr(agent, "get_enhanced_log_data"):
+                        enhanced_log_data = agent.get_enhanced_log_data()
+
+                    usage_raw = response.data.get("usage_raw", {}) or {}
+                    prompt_tokens = usage_raw.get("prompt_tokens", 0)
+                    completion_tokens = usage_raw.get("completion_tokens", 0)
                 else:
                     prompt_tokens = sum(
                         [
@@ -565,6 +618,7 @@ def main():
         "UITARS",
         "UITARS_1_5",
         "Qwen3VL",
+        "GeneralE2E",
     ] and hasattr(agent, "get_enhanced_log_data"):
         enhanced_log_data = agent.get_enhanced_log_data()
         if enhanced_log_data.get("detailed_model_logs"):

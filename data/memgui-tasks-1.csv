@@ -1,0 +1,2 @@
+task_identifier,task_description,task_app,num_apps,is_cross_app,category,requires_ui_memory,shortcut_potential,output_type,golden_steps,task_difficulty,task_language
+005-SearchSportsScores,"Open the BBC Sports app, find and tap on the Football category, proceed to 'Scores & Fixtures', and then perform a search for 'Real Madrid'.",['BBC Sports'],1,N,"['Sports: Content Navigation', 'Sports: Data Extraction']",N,1,UI Interactive Output,8,1,ENG

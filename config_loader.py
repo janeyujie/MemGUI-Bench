@@ -67,6 +67,7 @@ def apply_mode_presets(config, verbose=False):
     # Apply BASE_URL to all URL fields if they are null (only when base_url is set)
     url_fields = [
         "QWEN_BASE_URL",
+        "GENERAL_E2E_BASE_URL",
         "MEMGUI_STEP_DESC_BASE_URL",
         "MEMGUI_FINAL_DECISION_BASE_URL",
     ]

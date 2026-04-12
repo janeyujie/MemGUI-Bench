@@ -341,7 +341,7 @@ class AndroidWorldAgent(BaseAgent):
 
         # TODO: Escaping double quotes works for Windows Only, use '\' as escape characters otherwise
         args = (
-            f"""--openai_api_key {self.config["OPENAI_API_KEY"]} """
+            f"""--openai_api_key "{self.config.get("OPENAI_API_KEY", "")}" """
             f"""--task "{full_task_description.replace('"', '""')}" """
             f'--lang "{task_language}" '
             f'--output_dir "{output_dir}" '
@@ -415,6 +415,45 @@ class AndroidWorldAgent(BaseAgent):
             args += f"""--qwen_base_url "{self.config["QWEN_BASE_URL"]}" """
             args += f"""--qwen_api_key "{self.config["QWEN_API_KEY"]}" """
             args += f"""--qwen_model "{self.config["QWEN_MODEL"]}" """
+
+        if self.agent_name == "GeneralE2E":
+            general_e2e_base_url = self.config.get("GENERAL_E2E_BASE_URL") or self.config.get(
+                "BASE_URL"
+            )
+            general_e2e_api_key = self.config.get("GENERAL_E2E_API_KEY") or self.config.get(
+                "OPENAI_API_KEY"
+            )
+            general_e2e_model = self.config.get("GENERAL_E2E_MODEL")
+
+            if not general_e2e_base_url:
+                raise ValueError(
+                    f"GENERAL_E2E_BASE_URL or BASE_URL must be specified in config for {self.agent_name} agent"
+                )
+            if not general_e2e_api_key:
+                raise ValueError(
+                    f"GENERAL_E2E_API_KEY or OPENAI_API_KEY must be specified in config for {self.agent_name} agent"
+                )
+            if not general_e2e_model:
+                raise ValueError(
+                    f"GENERAL_E2E_MODEL must be specified in config for {self.agent_name} agent"
+                )
+
+            args += f"""--general_e2e_base_url "{general_e2e_base_url}" """
+            args += f"""--general_e2e_api_key "{general_e2e_api_key}" """
+            args += f"""--general_e2e_model "{general_e2e_model}" """
+
+            if "GENERAL_E2E_HISTORY_N" in self.config:
+                args += (
+                    f"""--general_e2e_history_n {self.config["GENERAL_E2E_HISTORY_N"]} """
+                )
+            if "GENERAL_E2E_TEMPERATURE" in self.config:
+                args += (
+                    f"""--general_e2e_temperature {self.config["GENERAL_E2E_TEMPERATURE"]} """
+                )
+            if "GENERAL_E2E_MAX_TOKENS" in self.config:
+                args += (
+                    f"""--general_e2e_max_tokens {self.config["GENERAL_E2E_MAX_TOKENS"]} """
+                )
         return script, args
 
 
@@ -452,6 +491,10 @@ class UITARS_1_5(AndroidWorldAgent):
 
 class Qwen3VL(AndroidWorldAgent):
     agent_name = "Qwen3VL"
+
+
+class GeneralE2E(AndroidWorldAgent):
+    agent_name = "GeneralE2E"
 
 
 class AgentAsAModel(BaseAgent):
