@@ -30,8 +30,19 @@ parser.add_argument(
 parser.add_argument("--session_id", type=str, default=config["SESSION_ID"])
 parser.add_argument("--task_id", type=str, default=None)
 parser.add_argument("--no_concurrent", action="store_true")
-parser.add_argument("--setup_avd", action="store_true", default=True)
+parser.add_argument("--setup_avd", dest="setup_avd", action="store_true")
+parser.add_argument("--no_setup_avd", dest="setup_avd", action="store_false")
 parser.add_argument("--setup_emulator", action="store_true")
+parser.add_argument(
+    "--use_existing_devices",
+    action="store_true",
+    help="Reuse already running adb devices instead of creating or launching AVDs.",
+)
+parser.add_argument(
+    "--auto_confirm_devices",
+    action="store_true",
+    help="Skip the interactive confirmation when multiple existing adb devices are detected.",
+)
 parser.add_argument("--skip_key_components", type=bool, default=True)
 parser.add_argument(
     "--reasoning_mode", type=str, default="direct", choices=["result_only", "direct"]
@@ -50,7 +61,12 @@ parser.add_argument(
     default=config["MAX_ATTEMPTS"],
     help="Maximum number of attempts for each task.",
 )
+parser.set_defaults(setup_avd=True)
 args = parser.parse_args()
+
+if args.use_existing_devices:
+    args.setup_avd = False
+    args.setup_emulator = False
 
 # 初始化输出目录和结果DataFrame
 output_dir = utils.setup_output_directory(
@@ -102,7 +118,7 @@ if args.mode in ("full", "exec"):
             config["NUM_OF_EMULATOR"],
         )
     else:
-        devices = utils.setup_devices()
+        devices = utils.setup_devices(auto_confirm=args.auto_confirm_devices)
 else:
     devices = [{"serial": "eval_mode"}]
 

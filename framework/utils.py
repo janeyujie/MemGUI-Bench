@@ -66,26 +66,40 @@ def get_all_devices():
     device_list = []
     result = execute_adb(adb_command)
     if result != "ERROR":
-        devices = result.split("\n")[1:]
-        for d in devices:
-            device_list.append(d.split()[0])
+        for line in result.split("\n")[1:]:
+            line = line.strip()
+            if not line or "\t" not in line:
+                continue
+            serial, status = line.split("\t", 1)
+            if status == "device":
+                device_list.append(serial)
 
     return device_list
 
 
-def setup_devices():
+def infer_device_metadata(serial):
+    match = re.fullmatch(r"emulator-(\d+)", serial)
+    if not match:
+        return {"serial": serial, "console_port": None, "grpc_port": None}
+
+    console_port = int(match.group(1))
+    return {
+        "serial": serial,
+        "console_port": console_port,
+        "grpc_port": console_port + 3000,
+    }
+
+
+def setup_devices(auto_confirm=False):
     devices = get_all_devices()
     print(f"{len(devices)} device(s) found: {devices}")
     if len(devices) == 0:
         exit(1)
-    elif len(devices) > 1:
+    elif len(devices) > 1 and not auto_confirm:
         ans = input("Are you sure to run using all devices? (y/n)")
         if ans.strip().lower() != "y":
             exit(1)
-    return [
-        {"serial": serial, "console_port": None, "grpc_port": None}
-        for serial in devices
-    ]
+    return [infer_device_metadata(serial) for serial in devices]
 
 
 def setup_avd(
@@ -110,7 +124,10 @@ def setup_avd(
 def parse_adb_devices(res) -> dict:
     devices = {}
     for line in res.split("\n")[1:]:
-        serial, status = line.split("\t")
+        line = line.strip()
+        if not line or "\t" not in line:
+            continue
+        serial, status = line.split("\t", 1)
         devices[serial] = status
     return devices
 
