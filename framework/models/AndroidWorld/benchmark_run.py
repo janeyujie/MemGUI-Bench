@@ -10,6 +10,7 @@ from android_world.agents import (
     general_e2e,
     qwen3_vl,
 )
+from android_world.env import android_world_controller
 from android_world.env import env_launcher
 from PIL import Image
 import json
@@ -444,12 +445,20 @@ def process_action(response, grounded_action_key):
 def main():
     """主函数，执行基准测试"""
     start_time_initial = time.time()
+    env_a11y_method = android_world_controller.A11yMethod.A11Y_FORWARDER_APP
+    install_a11y_forwarding_app = True
+    if args.agent == "GeneralE2E":
+        env_a11y_method = android_world_controller.A11yMethod.SCREENSHOT_ONLY
+        install_a11y_forwarding_app = False
+
     env = env_launcher.load_and_setup_env(
         console_port=args.device_console_port,
         emulator_setup=_EMULATOR_SETUP,
         freeze_datetime=False,
         adb_path=args.adb_path,
         grpc_port=args.device_grpc_port,
+        a11y_method=env_a11y_method,
+        install_a11y_forwarding_app=install_a11y_forwarding_app,
     )
     # Benchmark: Remove api level check
     # env_launcher.verify_api_level(env)

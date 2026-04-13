@@ -161,6 +161,9 @@ class A11yMethod(enum.Enum):
     # From `uiautomator dump``.
     UIAUTOMATOR = "uiautomator"
 
+    # Screenshot-only mode with no a11y tree or XML UI dump dependency.
+    SCREENSHOT_ONLY = "screenshot_only"
+
 
 def apply_a11y_forwarder_app_wrapper(
     env: env_interface.AndroidEnvInterface, install_a11y_forwarding_app: bool
@@ -191,6 +194,8 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
         install_a11y_forwarding_app: bool = True,
     ):
         self._original_env = env
+        self._a11y_method = a11y_method
+        self._install_a11y_forwarding_app = install_a11y_forwarding_app
         if a11y_method == A11yMethod.A11Y_FORWARDER_APP:
             self._env = apply_a11y_forwarder_app_wrapper(
                 env, install_a11y_forwarding_app
@@ -198,7 +203,6 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
             self._env.reset()  # Initializes required server services in a11y wrapper.
         else:
             self._env = env
-        self._a11y_method = a11y_method
 
     @property
     def device_screen_size(self) -> tuple[int, int]:
@@ -226,6 +230,8 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
             console_port=self.env._coordinator._simulator._config.emulator_launcher.emulator_console_port,
             adb_path=self.env._coordinator._simulator._config.adb_controller.adb_path,
             grpc_port=self.env._coordinator._simulator._config.emulator_launcher.grpc_port,
+            a11y_method=self._a11y_method,
+            install_a11y_forwarding_app=self._install_a11y_forwarding_app,
         ).env
         # pylint: enable=protected-access
         # pytype: enable=attribute-error
@@ -256,10 +262,12 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
                 self.get_a11y_forest(),
                 exclude_invisible_elements=True,
             )
-        else:
+        elif self._a11y_method == A11yMethod.UIAUTOMATOR:
             return representation_utils.xml_dump_to_ui_elements(
                 adb_utils.uiautomator_dump(self._env)
             )
+        else:
+            return []
 
     def _process_timestep(self, timestep: dm_env.TimeStep) -> dm_env.TimeStep:
         """Adds a11y tree info to the observation."""
@@ -269,9 +277,12 @@ class AndroidWorldController(base_wrapper.BaseWrapper):
                 forest,
                 exclude_invisible_elements=True,
             )
-        else:
+        elif self._a11y_method == A11yMethod.UIAUTOMATOR:
             forest = None
             ui_elements = self.get_ui_elements()
+        else:
+            forest = None
+            ui_elements = []
         timestep.observation[OBSERVATION_KEY_FOREST] = forest
         timestep.observation[OBSERVATION_KEY_UI_ELEMENTS] = ui_elements
         return timestep
@@ -331,6 +342,8 @@ def get_controller(
     console_port: int = 5554,
     adb_path: str = DEFAULT_ADB_PATH,
     grpc_port: int = 8554,
+    a11y_method: A11yMethod = A11yMethod.A11Y_FORWARDER_APP,
+    install_a11y_forwarding_app: bool = True,
 ) -> AndroidWorldController:
     """Creates a controller by connecting to an existing Android environment."""
 
@@ -347,4 +360,8 @@ def get_controller(
     )
     android_env_instance = _load_android_env(config, console_port)
     logging.info("Setting up AndroidWorldController.")
-    return AndroidWorldController(android_env_instance)
+    return AndroidWorldController(
+        android_env_instance,
+        a11y_method=a11y_method,
+        install_a11y_forwarding_app=install_a11y_forwarding_app,
+    )
