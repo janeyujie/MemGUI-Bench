@@ -16,6 +16,7 @@
 
 import contextlib
 import enum
+import inspect
 import os
 import time
 from typing import Any
@@ -107,6 +108,33 @@ _TASK_PATH = file_utils.convert_to_posix_path(
     file_utils.get_local_tmp_directory(), "default.textproto"
 )
 DEFAULT_ADB_PATH = "~/Android/Sdk/platform-tools/adb"
+
+
+def _load_android_env(
+    config: config_classes.AndroidEnvConfig, console_port: int
+) -> env_interface.AndroidEnvInterface:
+    """Loads AndroidEnv across loader API variants.
+
+    Some android_env versions expect `loader.load(config)`, while others
+    require `loader.load(config, device_serial)`. MemGUI-Bench needs to work
+    with both.
+    """
+    device_serial = f"emulator-{console_port}"
+
+    try:
+        signature = inspect.signature(loader.load)
+        if "device_serial" in signature.parameters:
+            return loader.load(config, device_serial)
+    except (TypeError, ValueError):
+        # Fall back to runtime probing below if signature inspection fails.
+        pass
+
+    try:
+        return loader.load(config)
+    except TypeError as exc:
+        if "device_serial" not in str(exc):
+            raise
+        return loader.load(config, device_serial)
 
 
 # UI tree-specific keys that are added to observations:
@@ -317,7 +345,6 @@ def get_controller(
             adb_controller=config_classes.AdbControllerConfig(adb_path=adb_path),
         ),
     )
-    # android_env_instance = loader.load(config, f"emulator-{console_port}")
-    android_env_instance = loader.load(config)
+    android_env_instance = _load_android_env(config, console_port)
     logging.info("Setting up AndroidWorldController.")
     return AndroidWorldController(android_env_instance)

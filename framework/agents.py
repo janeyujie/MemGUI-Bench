@@ -147,6 +147,15 @@ class BaseAgent:
                 file.write(f"<{self.agent_name}>\n")
                 file.write(stderr)
 
+        if process.returncode != 0:
+            print(f"{self.agent_name} exited with code {process.returncode}.")
+            if stderr:
+                print("Subprocess stderr:")
+                print(stderr[-4000:])
+            elif stdout:
+                print("Subprocess stdout:")
+                print(stdout[-4000:])
+
         return (process.returncode in [0, 2, 4], process.returncode)
 
 

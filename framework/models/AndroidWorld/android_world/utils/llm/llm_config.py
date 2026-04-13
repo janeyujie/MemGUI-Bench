@@ -31,17 +31,16 @@ except Exception as e:
     AGENT_BASE_URL = os.environ.get("BASE_URL", "https://openrouter.fans/v1")
     AGENT_MODEL = os.environ.get("QWEN_MODEL", "qwen/qwen3-vl-8b-instruct")
 
-# Validate required configuration
 if not AGENT_API_KEY:
-    raise ValueError(
-        "QWEN_API_KEY not found in config.yaml or environment variables. "
-        "Please set it in config.yaml or as an environment variable."
+    print(
+        "Warning: QWEN_API_KEY not found in config.yaml or environment variables. "
+        "Agents that rely on llm_api defaults will fail at request time until it is set."
     )
 
 # Default values for backward compatibility
 DEFAULT_MODEL = AGENT_MODEL or "qwen/qwen3-vl-8b-instruct"
 DEFAULT_BASE_URL = AGENT_BASE_URL or "https://openrouter.fans/v1"
-DEFAULT_API_KEY = AGENT_API_KEY
+DEFAULT_API_KEY = AGENT_API_KEY or ""
 DEFAULT_MAX_RETRIES = 200
 DEFAULT_RETRY_DELAY = 2
 DEFAULT_MAX_TOKENS = 6500
@@ -122,4 +121,3 @@ def get_model_config(config_name="default"):
         配置字典
     """
     return MODEL_CONFIGS.get(config_name, MODEL_CONFIGS["default"])
-

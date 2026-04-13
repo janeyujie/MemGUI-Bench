@@ -39,7 +39,7 @@ def _get_client(base_url=None, api_key=None):
 
 
 # Default client (for backward compatibility)
-client = _get_client()
+client = _get_client() if DEFAULT_API_KEY else None
 
 
 def extract_token_usage(usage_info):
@@ -582,4 +582,3 @@ def inference_chat_gemini_multiturn(
             print(f"请求异常，{retry_delay}秒后进行第{retry_count}次重试...")
             time.sleep(retry_delay)
             continue
-
