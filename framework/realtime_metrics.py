@@ -88,6 +88,18 @@ class MetricsCalculator:
         self.df = None
         self.agent_name = "Unknown"
         self.session_name = ""
+
+    def _attempt_range(self) -> range:
+        """Return the configured attempt range."""
+        return range(1, self.max_attempts + 1)
+
+    def _has_recovery_metrics(self) -> bool:
+        """Whether recovery-based metrics are meaningful for this run."""
+        return self.max_attempts >= 2
+
+    def _has_pass_at_3(self) -> bool:
+        """Whether Pass@3-style metrics are available."""
+        return self.max_attempts >= 3
         
     def load_data(self) -> bool:
         """Load and preprocess data from CSV."""
@@ -274,19 +286,20 @@ class MetricsCalculator:
     def _calculate_pass_at_k(self) -> Dict[str, Any]:
         """Calculate Pass@K rates for overall, memory, and standard tasks."""
         total = len(self.df)
-        
-        # Calculate pass@k columns
-        self.df["pass_at_1"] = self.df["success_att_1"]
-        self.df["pass_at_2"] = self.df[["success_att_1", "success_att_2"]].max(axis=1)
-        self.df["pass_at_3"] = self.df[[f"success_att_{i}" for i in range(1, self.max_attempts + 1)]].max(axis=1)
+
+        # Calculate pass@k columns for the configured attempt budget only.
+        success_cols = []
+        for k in self._attempt_range():
+            success_cols.append(f"success_att_{k}")
+            self.df[f"pass_at_{k}"] = self.df[success_cols].max(axis=1)
         
         # Now filter after adding pass_at columns
         memory_df = self.df[self.df["requires_ui_memory"]]
         standard_df = self.df[~self.df["requires_ui_memory"]]
         
         results = {}
-        
-        for k in range(1, self.max_attempts + 1):
+
+        for k in self._attempt_range():
             pass_col = f"pass_at_{k}"
             
             # Overall
@@ -347,6 +360,11 @@ class MetricsCalculator:
         """Calculate Failure Recovery Rate (FRR)."""
         # FRR = ((w_2 * R_2) + (w_3 * R_3) + ...) / N_failed_1 * 100
         # w_k = 1.0 / (2 ** (k - 2)) for k >= 2
+
+        if not self._has_recovery_metrics():
+            return {
+                "n_failed_1": int((self.df["success_att_1"] == 0).sum()),
+            }
         
         failed_on_1 = self.df[self.df["success_att_1"] == 0]
         n_failed_1 = len(failed_on_1)
@@ -384,19 +402,18 @@ class MetricsCalculator:
         return result
         
     def _calculate_efficiency(self) -> Dict[str, Any]:
-        """Calculate efficiency metrics (step ratio, time/step, cost/step)."""
+        """Calculate efficiency metrics (step ratio, time/step, token/step)."""
         results = {}
-        
-        # Cost calculation: Gemini-2.5-pro pricing ($1.25/M in, $10/M out)
-        for k in range(1, self.max_attempts + 1):
-            p1_df = self.df[self.df[f"pass_at_{k}"] == 1]
+
+        for k in self._attempt_range():
+            pk_df = self.df[self.df[f"pass_at_{k}"] == 1]
             
-            if not p1_df.empty and "golden_steps" in p1_df.columns:
-                valid_mask = p1_df["golden_steps"] > 0
+            if not pk_df.empty and "golden_steps" in pk_df.columns:
+                valid_mask = pk_df["golden_steps"] > 0
                 if valid_mask.sum() > 0:
                     step_ratios = (
-                        p1_df.loc[valid_mask, f"steps_att_1"]
-                        / p1_df.loc[valid_mask, "golden_steps"]
+                        pk_df.loc[valid_mask, "steps_att_1"]
+                        / pk_df.loc[valid_mask, "golden_steps"]
                     )
                     results[f"step_ratio_at_{k}"] = step_ratios.mean()
                 else:
@@ -404,9 +421,9 @@ class MetricsCalculator:
             else:
                 results[f"step_ratio_at_{k}"] = 0
                 
-            # Time and cost per step
+            # Time and token consumption per step across attempts 1..k.
             total_time = 0
-            total_cost = 0
+            total_tokens = 0
             total_steps = 0
             
             for _, row in self.df.iterrows():
@@ -417,13 +434,11 @@ class MetricsCalculator:
                         total_time += row.get(f"time_att_{att}", 0)
                         prompt_tokens = row.get(f"prompt_tokens_att_{att}", 0)
                         completion_tokens = row.get(f"completion_tokens_att_{att}", 0)
-                        total_cost += (
-                            (prompt_tokens * steps / 1_000_000) * 1.25
-                            + (completion_tokens * steps / 1_000_000) * 10
-                        )
+                        total_tokens += (prompt_tokens + completion_tokens) * steps
                         
+            results[f"total_tokens_at_{k}"] = int(total_tokens)
             results[f"time_per_step_at_{k}"] = total_time / total_steps if total_steps > 0 else 0
-            results[f"cost_per_step_at_{k}"] = total_cost / total_steps if total_steps > 0 else 0
+            results[f"token_per_step_at_{k}"] = total_tokens / total_steps if total_steps > 0 else 0
             
         return results
         
@@ -495,7 +510,7 @@ class MetricsCalculator:
         """Calculate BadCase category statistics."""
         results = {}
         
-        for att in range(1, self.max_attempts + 1):
+        for att in self._attempt_range():
             failed_df = self.df[self.df[f"success_att_{att}"] == 0].copy()
             if failed_df.empty:
                 continue
@@ -522,9 +537,7 @@ class MetricsCalculator:
     def _calculate_token_stats(self) -> Dict[str, Any]:
         """Calculate token usage statistics."""
         results = {}
-        total_tasks = len(self.df)
-        
-        for att in range(1, self.max_attempts + 1):
+        for att in self._attempt_range():
             prompt_col = f"prompt_tokens_att_{att}"
             completion_col = f"completion_tokens_att_{att}"
             steps_col = f"steps_att_{att}"
@@ -533,9 +546,11 @@ class MetricsCalculator:
                 total_prompt = (self.df[prompt_col] * self.df[steps_col]).sum()
                 total_completion = (self.df[completion_col] * self.df[steps_col]).sum()
                 total_steps = self.df[steps_col].sum()
+                total_tokens = total_prompt + total_completion
                 
                 results[f"token_att{att}_total_prompt"] = int(total_prompt)
                 results[f"token_att{att}_total_completion"] = int(total_completion)
+                results[f"token_att{att}_total"] = int(total_tokens)
                 results[f"token_att{att}_total_steps"] = int(total_steps)
                 results[f"token_att{att}_avg_prompt"] = (
                     int(total_prompt / total_steps) if total_steps > 0 else 0
@@ -637,13 +652,15 @@ class MetricsPrinter:
         total = metrics.get("total_tasks", 0)
         memory = metrics.get("memory_tasks", 0)
         standard = metrics.get("standard_tasks", 0)
+        max_attempts = metrics.get("max_attempts", 3)
+        ks = range(1, max_attempts + 1)
         
         print(f"\n[>] Pass@K Results:")
         
         # Overall
         pass_str = " | ".join([
             f"@{k}: {metrics.get(f'pass_at_{k}_count', 0)}/{total} ({metrics.get(f'pass_at_{k}_rate', 0):.1f}%)"
-            for k in range(1, 4)
+            for k in ks
         ])
         print(f"    Overall:  {pass_str}")
         
@@ -651,7 +668,7 @@ class MetricsPrinter:
         if memory > 0:
             mem_str = " | ".join([
                 f"@{k}: {metrics.get(f'pass_at_{k}_memory_count', 0)}/{memory} ({metrics.get(f'pass_at_{k}_memory_rate', 0):.1f}%)"
-                for k in range(1, 4)
+                for k in ks
             ])
             print(f"    Memory:   {mem_str}")
             
@@ -659,7 +676,7 @@ class MetricsPrinter:
         if standard > 0:
             std_str = " | ".join([
                 f"@{k}: {metrics.get(f'pass_at_{k}_standard_count', 0)}/{standard} ({metrics.get(f'pass_at_{k}_standard_rate', 0):.1f}%)"
-                for k in range(1, 4)
+                for k in ks
             ])
             print(f"    Standard: {std_str}")
             
@@ -675,11 +692,19 @@ class MetricsPrinter:
         print(f"    IRR: {avg_irr:.1f}% ({irr_count}/{memory_tasks} memory tasks evaluated)")
         
         # FRR
-        frr = metrics.get("frr", 0)
-        r2 = metrics.get("recovery_at_2", 0)
-        r3 = metrics.get("recovery_at_3", 0)
-        n_failed = metrics.get("n_failed_1", 0)
-        print(f"    FRR: {frr:.1f}% (R2={r2}, R3={r3}, first_failures={n_failed})")
+        if metrics.get("max_attempts", 3) >= 2 and "frr" in metrics:
+            frr = metrics.get("frr", 0)
+            recovery_keys = sorted(
+                int(key.rsplit("_", 1)[1])
+                for key in metrics.keys()
+                if key.startswith("recovery_at_")
+            )
+            recovery_parts = [
+                f"R{k}={metrics.get(f'recovery_at_{k}', 0)}" for k in recovery_keys
+            ]
+            n_failed = metrics.get("n_failed_1", 0)
+            suffix = ", ".join(recovery_parts + [f"first_failures={n_failed}"])
+            print(f"    FRR: {frr:.1f}% ({suffix})")
         
         # MTPR
         mtpr = metrics.get("mtpr", 0)
@@ -690,6 +715,9 @@ class MetricsPrinter:
     @staticmethod
     def _print_grouping_metrics(metrics: Dict[str, Any]):
         """Print difficulty and app count grouping metrics."""
+        max_attempts = metrics.get("max_attempts", 3)
+        ks = range(1, max_attempts + 1)
+
         # Difficulty grouping
         diff_keys = [k for k in metrics.keys() if k.startswith("count_diff_")]
         if diff_keys:
@@ -697,7 +725,7 @@ class MetricsPrinter:
             for key in sorted(diff_keys):
                 diff = key.replace("count_diff_", "")
                 count = metrics[key]
-                rates = [f"@{k}={metrics.get(f'pass_at_{k}_diff_{diff}', 0):.1f}%" for k in range(1, 4)]
+                rates = [f"@{k}={metrics.get(f'pass_at_{k}_diff_{diff}', 0):.1f}%" for k in ks]
                 print(f"    D{diff}: {' | '.join(rates)} (n={count})")
                 
         # App count grouping
@@ -707,7 +735,7 @@ class MetricsPrinter:
             for key in sorted(apps_keys):
                 apps = key.replace("count_apps_", "")
                 count = metrics[key]
-                rates = [f"@{k}={metrics.get(f'pass_at_{k}_apps_{apps}', 0):.1f}%" for k in range(1, 4)]
+                rates = [f"@{k}={metrics.get(f'pass_at_{k}_apps_{apps}', 0):.1f}%" for k in ks]
                 print(f"    {apps} Apps: {' | '.join(rates)} (n={count})")
                 
     @staticmethod
@@ -716,17 +744,20 @@ class MetricsPrinter:
         has_tokens = any(k.startswith("token_att1_") for k in metrics.keys())
         if not has_tokens:
             return
+        max_attempts = metrics.get("max_attempts", 3)
             
         print(f"\n[>] Token Statistics:")
-        for att in range(1, 4):
+        for att in range(1, max_attempts + 1):
             total_prompt = metrics.get(f"token_att{att}_total_prompt", 0)
             total_completion = metrics.get(f"token_att{att}_total_completion", 0)
+            total_tokens = metrics.get(f"token_att{att}_total", 0)
             total_steps = metrics.get(f"token_att{att}_total_steps", 0)
             avg_prompt = metrics.get(f"token_att{att}_avg_prompt", 0)
             avg_completion = metrics.get(f"token_att{att}_avg_completion", 0)
             
             if total_steps > 0:
                 print(f"    Att{att}: {total_steps:,} steps | "
+                      f"Total: {total_tokens:,} | "
                       f"In: {total_prompt:,} (avg {avg_prompt:,}) | "
                       f"Out: {total_completion:,} (avg {avg_completion:,})")
 
@@ -837,18 +868,23 @@ class LeaderboardResultGenerator:
             Dictionary in leaderboard format (compatible with data/agents/*.json)
         """
         # Extract cross-app metrics (by num_apps)
+        max_attempts = metrics.get("max_attempts", 3)
+        has_pass_at_3 = max_attempts >= 3
+        has_long_term = max_attempts >= 2
+        final_k = max_attempts if has_long_term else None
+
         cross_app = {}
         for app_count in [1, 2, 3, 4]:
             app_key = f"apps_{app_count}"
             p1 = metrics.get(f"pass_at_1_{app_key}", 0)
-            p3 = metrics.get(f"pass_at_3_{app_key}", 0)
+            p3 = metrics.get(f"pass_at_3_{app_key}", 0) if has_pass_at_3 else None
             
             # IRR for this app count (use per-app-count IRR if available)
             irr = metrics.get(f"irr_{app_key}", metrics.get("avg_irr", 0))
             
             cross_app[f"app{app_count}"] = {
                 "p1": round(p1, 1),
-                "p3": round(p3, 1),
+                "p3": round(p3, 1) if p3 is not None else None,
                 "irr": round(irr, 1),
             }
         
@@ -858,30 +894,42 @@ class LeaderboardResultGenerator:
         for diff_num, diff_name in diff_mapping.items():
             diff_key = f"diff_{diff_num}"
             p1 = metrics.get(f"pass_at_1_{diff_key}", 0)
-            p3 = metrics.get(f"pass_at_3_{diff_key}", 0)
+            p3 = metrics.get(f"pass_at_3_{diff_key}", 0) if has_pass_at_3 else None
             irr = metrics.get(f"irr_{diff_key}", 0)
             difficulty[diff_name] = {
                 "p1": round(p1, 1),
-                "p3": round(p3, 1),
+                "p3": round(p3, 1) if p3 is not None else None,
                 "irr": round(irr, 2),
             }
         
         # Overall average
         avg_p1 = metrics.get("pass_at_1_rate", 0)
-        avg_p3 = metrics.get("pass_at_3_rate", 0)
+        avg_p3 = metrics.get("pass_at_3_rate", 0) if has_pass_at_3 else None
         
         # Core metrics
         irr = metrics.get("avg_irr", 0)
         mtpr = metrics.get("mtpr", 0)
-        frr = metrics.get("frr", 0)
         step_ratio = metrics.get("step_ratio_at_1", 0)
         time_per_step = metrics.get("time_per_step_at_1", 0)
-        cost_per_step = metrics.get("cost_per_step_at_1", 0)
+        total_tokens = metrics.get("total_tokens_at_1", 0)
+        token_per_step = metrics.get("token_per_step_at_1", 0)
         
-        # Long-term metrics (using pass@3 data)
-        step_ratio_p3 = metrics.get("step_ratio_at_3", step_ratio)
-        time_per_step_p3 = metrics.get("time_per_step_at_3", time_per_step)
-        cost_per_step_p3 = metrics.get("cost_per_step_at_3", cost_per_step)
+        long_term_metrics = None
+        if has_long_term and final_k is not None:
+            step_ratio_final = metrics.get(f"step_ratio_at_{final_k}", step_ratio)
+            time_per_step_final = metrics.get(f"time_per_step_at_{final_k}", time_per_step)
+            total_tokens_final = metrics.get(f"total_tokens_at_{final_k}", total_tokens)
+            token_per_step_final = metrics.get(
+                f"token_per_step_at_{final_k}",
+                token_per_step,
+            )
+            long_term_metrics = {
+                "frr": round(metrics.get("frr", 0), 1) if "frr" in metrics else None,
+                "stepRatio": round(step_ratio_final, 2) if step_ratio_final else None,
+                "timePerStep": round(time_per_step_final, 1),
+                "totalTokens": int(total_tokens_final) if total_tokens_final else None,
+                "tokenPerStep": round(token_per_step_final, 1) if token_per_step_final else None,
+            }
         
         # Build result in the exact format of data/agents/*.json
         # Metadata fields are left as placeholders for user to fill in
@@ -899,7 +947,7 @@ class LeaderboardResultGenerator:
             "difficulty": difficulty,
             "avg": {
                 "p1": round(avg_p1, 1),
-                "p3": round(avg_p3, 1),
+                "p3": round(avg_p3, 1) if avg_p3 is not None else None,
             },
             "metrics": {
                 "shortTerm": {
@@ -907,14 +955,10 @@ class LeaderboardResultGenerator:
                     "mtpr": round(mtpr, 2),
                     "stepRatio": round(step_ratio, 2) if step_ratio else None,
                     "timePerStep": round(time_per_step, 1),
-                    "costPerStep": round(cost_per_step, 4) if cost_per_step else None,
+                    "totalTokens": int(total_tokens) if total_tokens else None,
+                    "tokenPerStep": round(token_per_step, 1) if token_per_step else None,
                 },
-                "longTerm": {
-                    "frr": round(frr, 1),
-                    "stepRatio": round(step_ratio_p3, 2) if step_ratio_p3 else None,
-                    "timePerStep": round(time_per_step_p3, 1),
-                    "costPerStep": round(cost_per_step_p3, 4) if cost_per_step_p3 else None,
-                },
+                "longTerm": long_term_metrics,
             },
         }
         
@@ -978,4 +1022,3 @@ def save_leaderboard_result(
         print(f"Warning: Failed to save leaderboard result: {e}")
         
     return path
-
