@@ -77,6 +77,16 @@ parser.add_argument("--general_e2e_model", type=str, required=False)
 parser.add_argument("--general_e2e_history_n", type=int, required=False)
 parser.add_argument("--general_e2e_temperature", type=float, required=False)
 parser.add_argument("--general_e2e_max_tokens", type=int, required=False)
+parser.add_argument("--general_e2e_enable_monitor", action="store_true")
+parser.add_argument(
+    "--general_e2e_context_mode",
+    type=str,
+    required=False,
+    help=(
+        "GeneralE2E context injection mode: full, without_task_summary, "
+        "without_verifier, three_field, or four_field."
+    ),
+)
 args = parser.parse_args()
 
 # os.environ['OPENAI_API_KEY'] = args.openai_api_key
@@ -270,6 +280,12 @@ def setup_agent(env):
         if args.general_e2e_max_tokens is not None:
             general_e2e_config["GENERAL_E2E_MAX_TOKENS"] = (
                 args.general_e2e_max_tokens
+            )
+        if args.general_e2e_enable_monitor:
+            general_e2e_config["GENERAL_E2E_ENABLE_MONITOR"] = True
+        if args.general_e2e_context_mode is not None:
+            general_e2e_config["GENERAL_E2E_CONTEXT_MODE"] = (
+                args.general_e2e_context_mode
             )
 
         agent = general_e2e.GeneralE2E(env, config=general_e2e_config)

@@ -11,6 +11,7 @@ numpy==1.26.3
 opencv-python
 pandas==2.1.4
 pydub
+pyyaml
 python-Levenshtein
 pytest
 requests==2.31.0

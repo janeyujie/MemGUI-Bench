@@ -10,6 +10,7 @@ HEADLESS=1
 START_ONLY=0
 RUN_ONLY=0
 STOP_AFTER_RUN=0
+NUM_EMULATORS_OVERRIDE=""
 RUN_ARGS=()
 
 usage() {
@@ -22,6 +23,7 @@ Examples:
   ./scripts/manual_start_and_run_bench.sh --start-only
   ./scripts/manual_start_and_run_bench.sh --run-only -- --task_id 001-FindProductAndFilter
   ./scripts/manual_start_and_run_bench.sh --stop-after-run -- --mode exec
+  ./scripts/manual_start_and_run_bench.sh --num-emulators 1 -- --task_id 001-FindProductAndFilter
 
 Options:
   --config PATH       Path to config.yaml. Default: ./config.yaml
@@ -30,6 +32,7 @@ Options:
   --start-only        Only prepare and start emulators. Do not run benchmark.
   --run-only          Do not start emulators. Reuse already running adb devices.
   --stop-after-run    Kill the emulators started from config after benchmark exits.
+  --num-emulators N   Override NUM_OF_EMULATOR from config.yaml for this run.
   -h, --help          Show this help message.
 
 Notes:
@@ -67,6 +70,10 @@ while [[ $# -gt 0 ]]; do
       STOP_AFTER_RUN=1
       shift
       ;;
+    --num-emulators)
+      NUM_EMULATORS_OVERRIDE="${2:-}"
+      shift 2
+      ;;
     --)
       shift
       RUN_ARGS=("$@")
@@ -93,6 +100,42 @@ if [[ ! -f "${CONFIG_PATH}" ]]; then
   echo "Config file not found: ${CONFIG_PATH}" >&2
   exit 1
 fi
+
+ensure_memgui_env() {
+  local conda_root=""
+  local candidate=""
+
+  if [[ "${CONDA_DEFAULT_ENV:-}" == "MemGUI" ]]; then
+    return 0
+  fi
+
+  if [[ -n "${CONDA_EXE:-}" ]]; then
+    conda_root="$(dirname "$(dirname "${CONDA_EXE}")")"
+  fi
+
+  for candidate in \
+    "${conda_root}" \
+    "/root/miniconda3" \
+    "${HOME}/miniconda3" \
+    "${HOME}/anaconda3"
+  do
+    if [[ -z "${candidate}" ]]; then
+      continue
+    fi
+    if [[ -f "${candidate}/etc/profile.d/conda.sh" ]]; then
+      export PATH="${candidate}/bin:${PATH}"
+      # shellcheck disable=SC1090
+      source "${candidate}/etc/profile.d/conda.sh"
+      conda activate MemGUI
+      return 0
+    fi
+  done
+
+  echo "Could not locate conda initialization script for activating MemGUI." >&2
+  exit 1
+}
+
+ensure_memgui_env
 
 mapfile -t CONFIG_VALUES < <(
   cd "${PROJECT_ROOT}" && python - "${CONFIG_PATH}" <<'PY'
@@ -121,6 +164,14 @@ SOURCE_AVD_HOME="${CONFIG_VALUES[4]}"
 ANDROID_SDK_PATH="${CONFIG_VALUES[5]}"
 SESSION_ID="${CONFIG_VALUES[6]}"
 
+if [[ -n "${NUM_EMULATORS_OVERRIDE}" ]]; then
+  if ! [[ "${NUM_EMULATORS_OVERRIDE}" =~ ^[1-9][0-9]*$ ]]; then
+    echo "--num-emulators must be a positive integer." >&2
+    exit 1
+  fi
+  NUM_OF_EMULATOR="${NUM_EMULATORS_OVERRIDE}"
+fi
+
 PLATFORM_TOOLS_DIR="$(dirname "$(dirname "${EMULATOR_PATH}")")/platform-tools"
 export PATH="${PLATFORM_TOOLS_DIR}:${PATH}"
 
@@ -136,6 +187,14 @@ collect_online_expected_devices() {
     if awk 'NR > 1 && $2 == "device" {print $1}' <<<"${adb_output}" | grep -qx "${serial}"; then
       echo "${serial}"
     fi
+  done
+}
+
+collect_expected_device_statuses() {
+  local adb_output serial
+  adb_output="$(adb devices)"
+  for serial in "${EXPECTED_SERIALS[@]}"; do
+    awk -v wanted="${serial}" 'NR > 1 && $1 == wanted {print $1 "\t" $2}' <<<"${adb_output}"
   done
 }
 
@@ -156,7 +215,8 @@ ensure_avd_copies() {
   echo "Missing ${missing_count} AVD copy/copies. Preparing cloned AVDs first..."
   (
     cd "${PROJECT_ROOT}"
-    python - "${CONFIG_PATH}" <<'PY'
+    NUM_OF_EMULATOR_OVERRIDE="${NUM_OF_EMULATOR}" python - "${CONFIG_PATH}" <<'PY'
+import os
 from config_loader import load_config
 from framework import utils
 import sys
@@ -166,7 +226,7 @@ utils.setup_avd(
     cfg["SYS_AVD_HOME"],
     cfg["SOURCE_AVD_HOME"],
     cfg["SOURCE_AVD_NAME"],
-    cfg["NUM_OF_EMULATOR"],
+    int(os.environ["NUM_OF_EMULATOR_OVERRIDE"]),
     cfg["ANDROID_SDK_PATH"],
 )
 PY
@@ -215,11 +275,25 @@ wait_for_emulators() {
   local deadline=$((SECONDS + timeout_seconds))
   local online_count ready_count serial boot_completed
   local -a online_devices
+  local -a device_statuses
+  local unauthorized_warned=0
 
   while true; do
     mapfile -t online_devices < <(collect_online_expected_devices)
+    mapfile -t device_statuses < <(collect_expected_device_statuses)
     online_count="${#online_devices[@]}"
     echo "${online_count}/${#EXPECTED_SERIALS[@]} device(s) launched"
+    if [[ "${#device_statuses[@]}" -gt 0 ]]; then
+      printf 'Observed adb statuses: %s\n' "${device_statuses[*]}"
+    fi
+    if [[ "${unauthorized_warned}" -eq 0 ]] && printf '%s\n' "${device_statuses[@]}" | grep -q $'\tunauthorized$'; then
+      echo "Detected unauthorized emulator device(s)."
+      if [[ "${HEADLESS}" -eq 1 ]]; then
+        echo "The emulator likely cold-booted and is waiting for USB debugging authorization."
+        echo "Rerun with --window and accept the RSA prompt, or wait for authorization to complete if it resolves automatically."
+      fi
+      unauthorized_warned=1
+    fi
     if [[ "${online_count}" -eq "${#EXPECTED_SERIALS[@]}" ]]; then
       break
     fi

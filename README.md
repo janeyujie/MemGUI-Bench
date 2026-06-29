@@ -209,7 +209,7 @@ python run.py
 | `--mode`          | `full` | `full` (exec+eval) / `exec` / `eval` |
 | `--session_id`    | config   | Session identifier for results             |
 | `--task_id`       | None     | Run specific task only                     |
-| `--max_attempts`  | 3        | Max attempts per task                      |
+| `--max_attempts`  | 3        | Max attempts per task (`1` disables recovery-based metrics) |
 | `--overwrite`     | False    | Overwrite existing results                 |
 | `--no_concurrent` | False    | Disable parallel evaluation                |
 
@@ -293,13 +293,16 @@ The benchmark automatically computes:
 | -------------------- | -------------------------------------------- |
 | **Pass@K**     | Success rate within K attempts               |
 | **IRR**        | Information Retrieval Rate (memory accuracy) |
-| **FRR**        | Failure Recovery Rate (learning from errors) |
+| **FRR**        | Failure Recovery Rate (available when `max_attempts >= 2`) |
 | **MTPR**       | Memory Task Performance Ratio                |
 | **Step Ratio** | Agent steps / Golden steps                   |
 | **Time/Step**  | Average execution time per step              |
-| **Cost/Step**  | API cost per step (if applicable)            |
+| **Total Tokens** | Total `(prompt + completion)` tokens consumed in summary outputs |
+| **Token/Step** | Average `(prompt + completion)` tokens per step in summary outputs |
 
 Results are saved to `metrics_summary.json` and `{agent_name}.json` (leaderboard format).
+
+When `max_attempts=1`, the benchmark only reports single-attempt metrics such as `Pass@1`, `IRR`, `MTPR`, `Step Ratio`, `Time/Step`, and `Token/Step`. Recovery-based metrics such as `FRR` and `Pass@2/@3` are omitted because no retry attempts exist.
 
 ---
 

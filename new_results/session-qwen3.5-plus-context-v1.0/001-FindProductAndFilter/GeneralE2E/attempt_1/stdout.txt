@@ -1,0 +1,4 @@
+<GeneralE2E>
+Using Emulator Simulator
+Goal: Open the Amazon app, search for running shoes for men, then filter for the brand ASICS and size 10. 
+Task completed successfully

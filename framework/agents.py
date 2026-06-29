@@ -463,6 +463,12 @@ class AndroidWorldAgent(BaseAgent):
                 args += (
                     f"""--general_e2e_max_tokens {self.config["GENERAL_E2E_MAX_TOKENS"]} """
                 )
+            if self.config.get("GENERAL_E2E_ENABLE_MONITOR"):
+                args += "--general_e2e_enable_monitor "
+            if "GENERAL_E2E_CONTEXT_MODE" in self.config:
+                args += (
+                    f"""--general_e2e_context_mode "{self.config["GENERAL_E2E_CONTEXT_MODE"]}" """
+                )
         return script, args
 
 

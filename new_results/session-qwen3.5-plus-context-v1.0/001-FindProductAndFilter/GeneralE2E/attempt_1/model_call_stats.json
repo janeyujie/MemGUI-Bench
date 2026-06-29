@@ -1,0 +1,9 @@
+{
+  "total_model_calls": 16,
+  "total_prompt_tokens": 147583,
+  "total_completion_tokens": 2298,
+  "average_prompt_tokens_per_call": 9223.9375,
+  "average_completion_tokens_per_call": 143.625,
+  "total_api_call_duration": 0,
+  "average_api_call_duration": 0.0
+}

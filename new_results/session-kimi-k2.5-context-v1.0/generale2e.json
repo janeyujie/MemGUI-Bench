@@ -1,0 +1,65 @@
+{
+  "name": "GeneralE2E",
+  "backbone": "-",
+  "type": "",
+  "institution": "",
+  "date": "",
+  "paperLink": "",
+  "codeLink": "",
+  "hasUITree": false,
+  "hasLongTermMemory": false,
+  "crossApp": {
+    "app1": {
+      "p1": 39.3,
+      "p3": null,
+      "irr": 33.3
+    },
+    "app2": {
+      "p1": 37.5,
+      "p3": null,
+      "irr": 45.4
+    },
+    "app3": {
+      "p1": 26.5,
+      "p3": null,
+      "irr": 47.3
+    },
+    "app4": {
+      "p1": 30.0,
+      "p3": null,
+      "irr": 56.6
+    }
+  },
+  "difficulty": {
+    "easy": {
+      "p1": 27.1,
+      "p3": null,
+      "irr": 31.14
+    },
+    "medium": {
+      "p1": 33.3,
+      "p3": null,
+      "irr": 42.66
+    },
+    "hard": {
+      "p1": 44.7,
+      "p3": null,
+      "irr": 61.74
+    }
+  },
+  "avg": {
+    "p1": 34.4,
+    "p3": null
+  },
+  "metrics": {
+    "shortTerm": {
+      "irr": 45.4,
+      "mtpr": 0.72,
+      "stepRatio": 1.36,
+      "timePerStep": 50.5,
+      "totalTokens": 128230909,
+      "tokenPerStep": 17946.9
+    },
+    "longTerm": null
+  }
+}

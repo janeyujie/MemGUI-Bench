@@ -59,6 +59,7 @@ GENERAL_E2E_BASE_URL: null  # null means use BASE_URL
 GENERAL_E2E_HISTORY_N: 3
 GENERAL_E2E_TEMPERATURE: 0.0
 GENERAL_E2E_MAX_TOKENS: 2048
+GENERAL_E2E_CONTEXT_MODE: "full"  # full | without_task_summary | without_verifier | three_field | four_field
 
 
 # ==============================================================================

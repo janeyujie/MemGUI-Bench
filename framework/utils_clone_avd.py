@@ -39,11 +39,12 @@ def clone_avd(
     tar_avd_dir = tar_avd_dir if tar_avd_dir else os.path.join(tar_android_avd_home, tar_avd_name + ".avd")
     tar_ini_file = tar_ini_file if tar_ini_file else os.path.join(tar_android_avd_home, tar_avd_name + ".ini")
 
-    # Copy the AVD folder
+    # Copy the AVD folder if needed. Do not return early when it already exists,
+    # because previous interrupted runs may have created the directory without
+    # generating the matching .ini registration file.
     print(f"Copying the AVD folder from {src_avd_dir} to {tar_avd_dir}")
     if os.path.exists(tar_avd_dir):
         print("Target AVD exists")
-        return
     else:
         shutil.copytree(src_avd_dir, tar_avd_dir)
 
@@ -73,23 +74,25 @@ def clone_avd(
                         new_line = new_line.replace("\\", "/")
                     file.write(new_line)
 
-    # Update the snapshots' hardware.ini file if it exists
-    for snapshot_name in os.listdir(os.path.join(tar_avd_dir, "snapshots")):
-        snapshots_hw_ini = os.path.join(tar_avd_dir, "snapshots", snapshot_name, "hardware.ini")
-        if os.path.exists(snapshots_hw_ini):
-            with open(snapshots_hw_ini) as file:
-                lines = file.readlines()
-            with open(snapshots_hw_ini, "w") as file:
-                for line in lines:
-                    # Update AVD name/ID
-                    new_line = (
-                        line.replace(src_avd_name, tar_avd_name)
-                        .replace(src_android_avd_home, tar_android_avd_home)
-                        .replace(src_sdk, tar_sdk)
-                    )
-                    if target_linux:
-                        new_line = new_line.replace("\\", "/")
-                    file.write(new_line)
+    # Update the snapshots' hardware.ini file if it exists.
+    snapshots_dir = os.path.join(tar_avd_dir, "snapshots")
+    if os.path.isdir(snapshots_dir):
+        for snapshot_name in os.listdir(snapshots_dir):
+            snapshots_hw_ini = os.path.join(snapshots_dir, snapshot_name, "hardware.ini")
+            if os.path.exists(snapshots_hw_ini):
+                with open(snapshots_hw_ini) as file:
+                    lines = file.readlines()
+                with open(snapshots_hw_ini, "w") as file:
+                    for line in lines:
+                        # Update AVD name/ID
+                        new_line = (
+                            line.replace(src_avd_name, tar_avd_name)
+                            .replace(src_android_avd_home, tar_android_avd_home)
+                            .replace(src_sdk, tar_sdk)
+                        )
+                        if target_linux:
+                            new_line = new_line.replace("\\", "/")
+                        file.write(new_line)
 
 
 if __name__ == "__main__":
